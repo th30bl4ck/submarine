@@ -5,10 +5,8 @@ grav = 0.5;
 jump_force = -11;
 on_ground = false;
 facing_right = true;
-
 oxygen = 100;
 ox_drain = 0.06;
 ox_refill = 0.4;
-
 in_dome = false;
 near_submarine = false;

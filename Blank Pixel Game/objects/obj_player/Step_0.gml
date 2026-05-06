@@ -1,3 +1,7 @@
+// Reset flags first so other objects can set them this frame
+in_dome = false;
+near_submarine = false;
+
 // Input
 var move_left  = keyboard_check(vk_left)  || keyboard_check(ord("A"));
 var move_right = keyboard_check(vk_right) || keyboard_check(ord("D"));
@@ -9,7 +13,7 @@ if (move_left)  { vx -= spd * 0.3; facing_right = false; }
 if (move_right) { vx += spd * 0.3; facing_right = true;  }
 vx *= 0.85;
 
-// Gravity + jump 
+// Gravity + jump
 if (jump && on_ground) vy = jump_force;
 vy += grav;
 vy = min(vy, 18);
@@ -39,19 +43,35 @@ x = clamp(x, 14, room_width - 14);
 
 // Oxygen logic
 if (room == room_ocean) {
-    if (in_dome) {
+    var inside_dome = false;
+    if (instance_exists(obj_dome)) {
+        var dm = obj_dome;
+        var rm = obj_resource_manager;
+        var dx = (x - dm.x) / rm.dome_width;
+        var dy = (y - dm.y) / rm.dome_height;
+        inside_dome = ((dx * dx) + (dy * dy) < 1);
+    }
+    
+    if (inside_dome) {
         oxygen = min(100, oxygen + ox_refill);
     } else {
         oxygen -= ox_drain;
         oxygen = max(0, oxygen);
-        // TODO: low oxygen warning 
     }
 }
 
-// Submarine interaction
-if (interact && near_submarine) {
+// Submarine 
+var near_sub = false;
+if (instance_exists(obj_submarine)) {
+    var dist = point_distance(x, y, obj_submarine.x, obj_submarine.y);
+    if (dist < 60) {
+        near_sub = true;
+    }
+}
+
+if (interact && near_sub) {
     if (room == room_ocean) {
-        player_spawn_x = 200; 
+        player_spawn_x = 200;
         player_spawn_y = 500;
         room_goto(room_surface);
     } else if (room == room_surface) {
@@ -60,7 +80,3 @@ if (interact && near_submarine) {
         room_goto(room_ocean);
     }
 }
-
-
-in_dome = false;
-near_submarine = false;
