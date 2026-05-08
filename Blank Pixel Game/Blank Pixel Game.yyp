@@ -60,7 +60,6 @@
     {"id":{"name":"spr_player_water_idle","path":"sprites/spr_player_water_idle/spr_player_water_idle.yy",},},
     {"id":{"name":"spr_player_water_walk","path":"sprites/spr_player_water_walk/spr_player_water_walk.yy",},},
     {"id":{"name":"spr_upgrade_station","path":"sprites/spr_upgrade_station/spr_upgrade_station.yy",},},
-    {"id":{"name":"Sprite9","path":"sprites/Sprite9/Sprite9.yy",},},
     {"id":{"name":"submarine","path":"sprites/submarine/submarine.yy",},},
   ],
   "resourceType":"GMProject",
