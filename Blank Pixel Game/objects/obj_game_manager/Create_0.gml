@@ -1,16 +1,59 @@
-globalvar WATER_Y, player_spawn_x, player_spawn_y, combat_active, combat_enemy, combat_turn, combat_message, combat_guard, combat_selected_move, combat_view_x, combat_view_y, combat_player_return_x, combat_player_return_y, combat_enemy_return_x, combat_enemy_return_y;
+globalvar WATER_Y, player_spawn_x, player_spawn_y;
 WATER_Y = 800;
 player_spawn_x = 200;
 player_spawn_y = 2300;
-combat_active = false;
-combat_enemy = noone;
-combat_turn = "player";
-combat_message = "";
-combat_guard = false;
-combat_selected_move = 0;
-combat_view_x = 0;
-combat_view_y = 0;
-combat_player_return_x = 0;
-combat_player_return_y = 0;
-combat_enemy_return_x = 0;
-combat_enemy_return_y = 0;
+global.combat_active = false;
+global.combat_enemy = noone;
+global.combat_turn = "player";
+global.combat_message = "";
+global.combat_guard = false;
+global.combat_selected_move = 0;
+global.combat_view_x = 0;
+global.combat_view_y = 0;
+global.combat_player_return_x = 0;
+global.combat_player_return_y = 0;
+global.combat_enemy_return_x = 0;
+global.combat_enemy_return_y = 0;
+global.combat_party = [];
+global.combat_enemies = [];
+global.combat_moves = [
+    {
+        name: "Harpoon Strike",
+        desc: "Reliable damage",
+        kind: "damage",
+        min_value: 11,
+        max_value: 19,
+        cooldown: 0
+    },
+    {
+        name: "Brace",
+        desc: "Guard until next turn",
+        kind: "guard",
+        min_value: 0,
+        max_value: 0,
+        cooldown: 1
+    },
+    {
+        name: "Repair Suit",
+        desc: "Heal one hero",
+        kind: "heal",
+        min_value: 16,
+        max_value: 24,
+        cooldown: 3
+    },
+    {
+        name: "Desperate Flare",
+        desc: "Risky high damage",
+        kind: "damage",
+        min_value: 5,
+        max_value: 28,
+        cooldown: 2
+    }
+];
+global.combat_phase = "none";
+global.combat_actor = 0;
+global.combat_enemy_actor = 0;
+global.combat_timer = 0;
+global.combat_lunge_timer = 0;
+global.combat_lunge_side = "";
+global.combat_lunge_index = 0;
