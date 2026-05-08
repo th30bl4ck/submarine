@@ -55,7 +55,6 @@
     {"id":{"name":"spr_mineral_iron","path":"sprites/spr_mineral_iron/spr_mineral_iron.yy",},},
     {"id":{"name":"spr_mineral_obsidian","path":"sprites/spr_mineral_obsidian/spr_mineral_obsidian.yy",},},
     {"id":{"name":"spr_platform","path":"sprites/spr_platform/spr_platform.yy",},},
-    {"id":{"name":"spr_player_land_idle","path":"sprites/spr_player_land_idle/spr_player_land_idle.yy",},},
     {"id":{"name":"spr_player_land","path":"sprites/spr_player_land/spr_player_land.yy",},},
     {"id":{"name":"spr_player_water_idle","path":"sprites/spr_player_water_idle/spr_player_water_idle.yy",},},
     {"id":{"name":"spr_player_water","path":"sprites/spr_player_water/spr_player_water.yy",},},
