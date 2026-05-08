@@ -346,21 +346,34 @@ if (move_left)
     image_xscale = -2;
 }
 
-if (vx == 0 && vy == 0)
-{
-    image_speed = 0; 
-    image_index = 0; 
-}
-else
-{
-    image_speed = 1;
-}
-
 if (move_right)
 {
     vx += spd * 0.3;
     facing_right = true;
     image_xscale = 2;
+}
+
+var player_is_moving = (vx != 0 || vy != 0);
+var player_in_dome = false;
+if (room == room_ocean && instance_exists(obj_dome) && instance_exists(obj_resource_manager)) {
+    var anim_dm = obj_dome;
+    var anim_rm = obj_resource_manager;
+    var anim_dx = (x - anim_dm.x) / anim_rm.dome_width;
+    var anim_dy = (y - anim_dm.y) / anim_rm.dome_height;
+    player_in_dome = ((anim_dx * anim_dx) + (anim_dy * anim_dy) < 1);
+}
+var player_in_water = (room == room_ocean && !player_in_dome);
+
+if (player_is_moving)
+{
+    image_speed = 1;
+    sprite_index = player_in_water ? spr_player_water_walk : spr_player_land_walk;
+}
+else
+{
+    image_speed = 0;
+    image_index = 0;
+    sprite_index = player_in_water ? spr_player_water_idle : spr_player_land_idle;
 }
 
 vx *= 0.85;
