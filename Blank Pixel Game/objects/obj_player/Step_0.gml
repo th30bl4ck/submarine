@@ -339,8 +339,30 @@ var jump       = keyboard_check_pressed(vk_space) || keyboard_check_pressed(vk_u
 var interact   = keyboard_check_pressed(ord("E"));
 
 // Horizontal movement
-if (move_left)  { vx -= spd * 0.3; facing_right = false; }
-if (move_right) { vx += spd * 0.3; facing_right = true;  }
+if (move_left)
+{
+    vx -= spd * 0.3;
+    facing_right = false;
+    image_xscale = -2;
+}
+
+if (vx == 0 && vy == 0)
+{
+    image_speed = 0; 
+    image_index = 0; 
+}
+else
+{
+    image_speed = 1;
+}
+
+if (move_right)
+{
+    vx += spd * 0.3;
+    facing_right = true;
+    image_xscale = 2;
+}
+
 vx *= 0.85;
 
 // Gravity + jump
