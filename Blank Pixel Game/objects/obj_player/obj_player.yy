@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":true,
   "spriteId":{
-    "name":"spr_player_land",
-    "path":"sprites/spr_player_land/spr_player_land.yy",
+    "name":"spr_player_land_walk",
+    "path":"sprites/spr_player_land_walk/spr_player_land_walk.yy",
   },
   "spriteMaskId":null,
   "visible":true,
