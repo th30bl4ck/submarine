@@ -26,7 +26,7 @@ if (!can_upgrade) max_level = true;
 // Background panel
 draw_set_colour(make_colour_rgb(10, 20, 35));
 draw_set_alpha(0.85);
-draw_rectangle(180, 120, 500, 360, false);
+draw_rectangle(180, 120, 500, 400, false);
 draw_set_alpha(1);
 
 // Title

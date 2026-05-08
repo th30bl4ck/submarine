@@ -1,6 +1,6 @@
 vx = 0;
 vy = 0;
-spd = 3.5;
+spd = 2;
 grav = 0.5;
 jump_force = -11;
 on_ground = false;
@@ -14,3 +14,6 @@ max_hp = 100;
 hp = max_hp;
 combat_attack = 14;
 combat_saved_xscale = image_xscale;
+
+image_xscale = 2;
+image_yscale = 2;
