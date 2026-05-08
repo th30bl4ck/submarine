@@ -68,10 +68,9 @@ if (instance_exists(obj_resource_manager)) {
     draw_set_colour(c_white);
 }
 
-if (variable_global_exists("combat_active") && global.combat_active && instance_exists(global.combat_enemy)) {
+if (variable_global_exists("combat_active") && global.combat_active && array_length(global.combat_party) > 0) {
     var gui_w = display_get_gui_width();
     var gui_h = display_get_gui_height();
-    var foe = global.combat_enemy;
 
     draw_set_alpha(0.78);
     draw_set_colour(make_colour_rgb(8, 8, 12));
@@ -88,49 +87,91 @@ if (variable_global_exists("combat_active") && global.combat_active && instance_
     draw_set_colour(make_colour_rgb(210, 190, 150));
     draw_text(60, 78, "Choose an action");
 
-    var player_hp_pct = obj_player.hp / obj_player.max_hp;
-    var enemy_hp_pct = foe.hp / foe.max_hp;
+    var party_slots = [
+        [175, 284],
+        [235, 252],
+        [295, 284],
+        [355, 252]
+    ];
+    var enemy_slots = [
+        [gui_w - 175, 284],
+        [gui_w - 235, 252],
+        [gui_w - 295, 252],
+        [gui_w - 355, 284]
+    ];
+    var lunge_amount = 0;
+    if (global.combat_lunge_timer > 0) {
+        if (global.combat_lunge_timer > 9) {
+            lunge_amount = (18 - global.combat_lunge_timer) * 4;
+        } else {
+            lunge_amount = global.combat_lunge_timer * 4;
+        }
+    }
 
-    draw_set_alpha(0.55);
-    draw_set_colour(make_colour_rgb(80, 70, 62));
-    draw_ellipse(165, 250, 385, 306, false);
-    draw_ellipse(gui_w - 385, 250, gui_w - 165, 306, false);
-    draw_set_alpha(1);
+    for (var party_i = 0; party_i < array_length(global.combat_party); party_i++) {
+        var member = global.combat_party[party_i];
+        var px = party_slots[party_i][0];
+        var py = party_slots[party_i][1];
+        if (global.combat_lunge_side == "party" && global.combat_lunge_index == party_i) px += lunge_amount;
 
-    draw_sprite_ext(obj_player.sprite_index, obj_player.image_index, 275, 246, 2, 2, 0, c_white, 1);
-    draw_sprite_ext(foe.sprite_index, foe.image_index, gui_w - 275, 246, -2, 2, 0, c_white, 1);
+        draw_set_alpha(0.55);
+        draw_set_colour(make_colour_rgb(80, 70, 62));
+        draw_ellipse(px - 48, py + 40, px + 48, py + 66, false);
+        draw_set_alpha(member.hp > 0 ? 1 : 0.35);
+        draw_sprite_ext(member.sprite, member.image, px, py, 1.55, 1.55, 0, c_white, 1);
+        draw_set_alpha(1);
 
-    draw_set_colour(c_white);
-    draw_text(60, 118, "Diver");
-    draw_text(gui_w - 310, 118, "Deep Stalker");
+        var hp_pct = max(0, member.hp) / member.max_hp;
+        draw_set_colour(c_dkgray);
+        draw_rectangle(px - 42, py + 72, px + 42, py + 80, false);
+        draw_set_colour(make_colour_rgb(190, 40, 45));
+        draw_rectangle(px - 42, py + 72, px - 42 + floor(84 * hp_pct), py + 80, false);
+        draw_set_colour(party_i == global.combat_actor && global.combat_phase == "player_select" ? c_yellow : c_white);
+        draw_text(px - 42, py + 84, member.name);
+    }
 
-    draw_set_colour(c_dkgray);
-    draw_rectangle(60, 142, 310, 160, false);
-    draw_rectangle(gui_w - 310, 142, gui_w - 60, 160, false);
-    draw_set_colour(make_colour_rgb(190, 40, 45));
-    draw_rectangle(60, 142, 60 + floor(250 * player_hp_pct), 160, false);
-    draw_rectangle(gui_w - 310, 142, gui_w - 310 + floor(250 * enemy_hp_pct), 160, false);
-    draw_set_colour(c_white);
-    draw_text(66, 164, string(obj_player.hp) + " / " + string(obj_player.max_hp));
-    draw_text(gui_w - 304, 164, string(foe.hp) + " / " + string(foe.max_hp));
+    for (var ei = 0; ei < array_length(global.combat_enemies); ei++) {
+        var foe = global.combat_enemies[ei];
+        if (instance_exists(foe)) {
+            var ex = enemy_slots[ei][0];
+            var ey = enemy_slots[ei][1];
+            if (global.combat_lunge_side == "enemy" && global.combat_lunge_index == ei) ex -= lunge_amount;
 
-    var names = ["1 Harpoon Strike", "2 Brace", "3 Repair Suit", "4 Desperate Flare"];
-    var descs = ["Reliable damage", "Reduce the next hit", "Recover HP", "Risky high damage"];
+            draw_set_alpha(0.55);
+            draw_set_colour(make_colour_rgb(80, 70, 62));
+            draw_ellipse(ex - 48, ey + 40, ex + 48, ey + 66, false);
+            draw_set_alpha(1);
+            draw_sprite_ext(foe.sprite_index, foe.image_index, ex, ey, -1.55, 1.55, 0, c_white, 1);
+
+            var enemy_hp_pct = max(0, foe.hp) / foe.max_hp;
+            draw_set_colour(c_dkgray);
+            draw_rectangle(ex - 42, ey + 72, ex + 42, ey + 80, false);
+            draw_set_colour(make_colour_rgb(190, 40, 45));
+            draw_rectangle(ex - 42, ey + 72, ex - 42 + floor(84 * enemy_hp_pct), ey + 80, false);
+            draw_set_colour(c_white);
+            draw_text(ex - 42, ey + 84, "Enemy " + string(ei + 1));
+        }
+    }
+
     var bx = 60;
     var by = gui_h - 256;
     var bw = 320;
     var bh = 48;
 
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < array_length(global.combat_moves); i++) {
+        var move_data = global.combat_moves[i];
+        var cooldown_left = global.combat_party[global.combat_actor].cooldowns[i];
         var yy = by + (i * 54);
-        draw_set_colour(make_colour_rgb(24, 28, 34));
+        draw_set_colour(cooldown_left > 0 ? make_colour_rgb(28, 25, 25) : make_colour_rgb(24, 28, 34));
         draw_rectangle(bx, yy, bx + bw, yy + bh, false);
         draw_set_colour(make_colour_rgb(120, 105, 82));
         draw_rectangle(bx, yy, bx + bw, yy + bh, true);
-        draw_set_colour(c_white);
-        draw_text(bx + 14, yy + 6, names[i]);
+        draw_set_colour(cooldown_left > 0 ? make_colour_rgb(125, 125, 125) : c_white);
+        draw_text(bx + 14, yy + 6, string(i + 1) + " " + move_data.name);
         draw_set_colour(make_colour_rgb(170, 170, 170));
-        draw_text(bx + 34, yy + 27, descs[i]);
+        var desc = move_data.desc;
+        if (cooldown_left > 0) desc += "  CD " + string(cooldown_left);
+        draw_text(bx + 34, yy + 27, desc);
     }
 
     draw_set_colour(make_colour_rgb(15, 15, 18));
