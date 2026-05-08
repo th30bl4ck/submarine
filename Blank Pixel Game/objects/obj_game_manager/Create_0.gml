@@ -57,3 +57,4 @@ global.combat_timer = 0;
 global.combat_lunge_timer = 0;
 global.combat_lunge_side = "";
 global.combat_lunge_index = 0;
+global.combat_pending_move = -1;
