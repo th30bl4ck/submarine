@@ -251,13 +251,15 @@ if (place_meeting(x, y, obj_enemy)) {
         global.combat_player_return_y = y;
         combat_saved_xscale = image_xscale;
 
+        var max_combat_enemies = 4;
+        var combat_join_distance = 360;
         global.combat_enemies = [];
         global.combat_enemies[0] = foe_touch;
         var enemy_count = 1;
         var total_enemies = instance_number(obj_enemy);
         for (var scan_enemy = 0; scan_enemy < total_enemies; scan_enemy++) {
             var found_enemy = instance_find(obj_enemy, scan_enemy);
-            if (found_enemy != foe_touch && enemy_count < 4 && point_distance(found_enemy.x, found_enemy.y, x, y) < 360) {
+            if (found_enemy != foe_touch && enemy_count < max_combat_enemies && point_distance(found_enemy.x, found_enemy.y, x, y) < combat_join_distance) {
                 global.combat_enemies[enemy_count] = found_enemy;
                 enemy_count++;
             }

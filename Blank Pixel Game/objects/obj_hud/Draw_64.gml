@@ -83,15 +83,13 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
     draw_rectangle(36, 34, gui_w - 36, gui_h - 30, true);
 
     draw_set_colour(c_white);
-    draw_text(60, 54, "TURN-BASED COMBAT");
     draw_set_colour(make_colour_rgb(210, 190, 150));
-    draw_text(60, 78, "Choose an action");
 
     var party_slots = [
-        [175, 284],
-        [235, 252],
-        [295, 284],
-        [355, 252]
+        [125, 286],
+        [205, 248],
+        [285, 286],
+        [365, 248]
     ];
     var enemy_slots = [
         [gui_w - 175, 284],
