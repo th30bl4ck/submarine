@@ -34,6 +34,8 @@
     {"name":"spr_mineral_iron","order":4,"path":"sprites/spr_mineral_iron/spr_mineral_iron.yy",},
     {"name":"spr_mineral_obsidian","order":6,"path":"sprites/spr_mineral_obsidian/spr_mineral_obsidian.yy",},
     {"name":"spr_platform","order":1,"path":"sprites/spr_platform/spr_platform.yy",},
+    {"name":"spr_player_land_idle","order":12,"path":"sprites/spr_player_land_idle/spr_player_land_idle.yy",},
+    {"name":"spr_player_water_idle","order":11,"path":"sprites/spr_player_water_idle/spr_player_water_idle.yy",},
     {"name":"spr_player_water","order":10,"path":"sprites/spr_player_water/spr_player_water.yy",},
     {"name":"spr_upgrade_station","order":7,"path":"sprites/spr_upgrade_station/spr_upgrade_station.yy",},
     {"name":"Sprite9","order":8,"path":"sprites/Sprite9/Sprite9.yy",},
