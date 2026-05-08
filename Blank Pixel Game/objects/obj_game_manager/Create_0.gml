@@ -1,4 +1,16 @@
-globalvar WATER_Y, player_spawn_x, player_spawn_y;
+globalvar WATER_Y, player_spawn_x, player_spawn_y, combat_active, combat_enemy, combat_turn, combat_message, combat_guard, combat_selected_move, combat_view_x, combat_view_y, combat_player_return_x, combat_player_return_y, combat_enemy_return_x, combat_enemy_return_y;
 WATER_Y = 800;
 player_spawn_x = 200;
 player_spawn_y = 2300;
+combat_active = false;
+combat_enemy = noone;
+combat_turn = "player";
+combat_message = "";
+combat_guard = false;
+combat_selected_move = 0;
+combat_view_x = 0;
+combat_view_y = 0;
+combat_player_return_x = 0;
+combat_player_return_y = 0;
+combat_enemy_return_x = 0;
+combat_enemy_return_y = 0;
