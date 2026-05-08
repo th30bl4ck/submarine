@@ -10,3 +10,7 @@ ox_drain = 0.06;
 ox_refill = 0.4;
 in_dome = false;
 near_submarine = false;
+max_hp = 100;
+hp = max_hp;
+combat_attack = 14;
+combat_saved_xscale = image_xscale;
