@@ -83,7 +83,9 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
     draw_rectangle(36, 34, gui_w - 36, gui_h - 30, true);
 
     draw_set_colour(c_white);
+    draw_text(60, 54, "TURN-BASED COMBAT");
     draw_set_colour(make_colour_rgb(210, 190, 150));
+    draw_text(60, 78, global.combat_phase == "target_select" ? "Choose an enemy target" : "Choose an action");
 
     var party_slots = [
         [125, 286],
@@ -92,10 +94,10 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
         [365, 248]
     ];
     var enemy_slots = [
-        [gui_w - 175, 284],
-        [gui_w - 235, 252],
-        [gui_w - 295, 252],
-        [gui_w - 355, 284]
+        [gui_w - 125, 286],
+        [gui_w - 205, 248],
+        [gui_w - 285, 286],
+        [gui_w - 365, 248]
     ];
     var lunge_amount = 0;
     if (global.combat_lunge_timer > 0) {
@@ -146,8 +148,8 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
             draw_rectangle(ex - 42, ey + 72, ex + 42, ey + 80, false);
             draw_set_colour(make_colour_rgb(190, 40, 45));
             draw_rectangle(ex - 42, ey + 72, ex - 42 + floor(84 * enemy_hp_pct), ey + 80, false);
-            draw_set_colour(c_white);
-            draw_text(ex - 42, ey + 84, "Enemy " + string(ei + 1));
+            draw_set_colour(global.combat_phase == "target_select" ? c_yellow : c_white);
+            draw_text(ex - 42, ey + 84, string(ei + 1) + " Enemy");
         }
     }
 
