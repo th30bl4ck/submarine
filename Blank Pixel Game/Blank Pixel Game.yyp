@@ -31,7 +31,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.4.222",
+    "IDEVersion":"2024.1400.5.1055",
   },
   "name":"Blank Pixel Game",
   "resources":[
@@ -50,8 +50,6 @@
     {"id":{"name":"room_surface","path":"rooms/room_surface/room_surface.yy",},},
     {"id":{"name":"scr_player_die","path":"scripts/scr_player_die/scr_player_die.yy",},},
     {"id":{"name":"spr_dome","path":"sprites/spr_dome/spr_dome.yy",},},
-    {"id":{"name":"spr_enemy_2","path":"sprites/spr_enemy_2/spr_enemy_2.yy",},},
-    {"id":{"name":"spr_enemy_3","path":"sprites/spr_enemy_3/spr_enemy_3.yy",},},
     {"id":{"name":"spr_enemy","path":"sprites/spr_enemy/spr_enemy.yy",},},
     {"id":{"name":"spr_mineral_crystal","path":"sprites/spr_mineral_crystal/spr_mineral_crystal.yy",},},
     {"id":{"name":"spr_mineral_iron","path":"sprites/spr_mineral_iron/spr_mineral_iron.yy",},},
@@ -61,7 +59,6 @@
     {"id":{"name":"spr_player_land_walk","path":"sprites/spr_player_land_walk/spr_player_land_walk.yy",},},
     {"id":{"name":"spr_player_water_idle","path":"sprites/spr_player_water_idle/spr_player_water_idle.yy",},},
     {"id":{"name":"spr_player_water_walk","path":"sprites/spr_player_water_walk/spr_player_water_walk.yy",},},
-    {"id":{"name":"spr_shamen","path":"sprites/spr_shamen/spr_shamen.yy",},},
     {"id":{"name":"spr_upgrade_station","path":"sprites/spr_upgrade_station/spr_upgrade_station.yy",},},
     {"id":{"name":"submarine","path":"sprites/submarine/submarine.yy",},},
   ],
