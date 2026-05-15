@@ -16,6 +16,24 @@ global.combat_enemy_return_x = 0;
 global.combat_enemy_return_y = 0;
 global.combat_party = [];
 global.combat_enemies = [];
+if (!variable_global_exists("teammate_roster")) {
+    global.teammate_roster = [];
+}
+if (!variable_global_exists("teammates_found")) {
+    global.teammates_found = 0;
+}
+if (!variable_global_exists("teammate_collected_keys")) {
+    global.teammate_collected_keys = [];
+}
+if (!variable_global_exists("teammate_menu_open")) {
+    global.teammate_menu_open = false;
+}
+if (!variable_global_exists("teammate_manager_near")) {
+    global.teammate_manager_near = false;
+}
+if (!variable_global_exists("teammate_recruit_near")) {
+    global.teammate_recruit_near = false;
+}
 global.combat_moves = [
     {
         name: "Harpoon Strike",
