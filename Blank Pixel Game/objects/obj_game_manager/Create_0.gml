@@ -2,6 +2,9 @@ globalvar WATER_Y, player_spawn_x, player_spawn_y;
 WATER_Y = 800;
 player_spawn_x = 200;
 player_spawn_y = 2300;
+if (!instance_exists(obj_resource_manager)) {
+    instance_create_depth(0, 0, 0, obj_resource_manager);
+}
 global.combat_active = false;
 global.combat_enemy = noone;
 global.combat_turn = "player";
@@ -16,6 +19,24 @@ global.combat_enemy_return_x = 0;
 global.combat_enemy_return_y = 0;
 global.combat_party = [];
 global.combat_enemies = [];
+if (!variable_global_exists("teammate_roster")) {
+    global.teammate_roster = [];
+}
+if (!variable_global_exists("teammates_found")) {
+    global.teammates_found = 0;
+}
+if (!variable_global_exists("teammate_collected_keys")) {
+    global.teammate_collected_keys = [];
+}
+if (!variable_global_exists("teammate_menu_open")) {
+    global.teammate_menu_open = false;
+}
+if (!variable_global_exists("teammate_manager_near")) {
+    global.teammate_manager_near = false;
+}
+if (!variable_global_exists("teammate_recruit_near")) {
+    global.teammate_recruit_near = false;
+}
 global.combat_moves = [
     {
         name: "Harpoon Strike",

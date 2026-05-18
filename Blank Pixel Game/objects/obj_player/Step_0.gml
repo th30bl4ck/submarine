@@ -2,9 +2,74 @@ if (!variable_global_exists("combat_active")) {
     global.combat_active = false;
 }
 
+if (room != room_surface) {
+    with (obj_teammate_follower) instance_destroy();
+} else if (instance_exists(obj_teammate_follower)) {
+    with (obj_teammate_follower) {
+        if (party_slot < 0 || !variable_global_exists("teammate_roster") || party_slot >= array_length(global.teammate_roster) || !global.teammate_roster[party_slot].active) {
+            instance_destroy();
+        }
+    }
+}
+
+if (room != room_dome) {
+    with (obj_teammate_roamer) instance_destroy();
+} else if (variable_global_exists("teammate_roster")) {
+    for (var roam_cleanup_i = 0; roam_cleanup_i < instance_number(obj_teammate_roamer); roam_cleanup_i++) {
+        var cleanup_roamer = instance_find(obj_teammate_roamer, roam_cleanup_i);
+        if (cleanup_roamer.party_slot < 0 || cleanup_roamer.party_slot >= array_length(global.teammate_roster)) {
+            with (cleanup_roamer) instance_destroy();
+        }
+    }
+
+    for (var roam_i = 0; roam_i < array_length(global.teammate_roster); roam_i++) {
+        var found_roamer = noone;
+        for (var roam_find_i = 0; roam_find_i < instance_number(obj_teammate_roamer); roam_find_i++) {
+            var roamer_inst = instance_find(obj_teammate_roamer, roam_find_i);
+            if (roamer_inst.party_slot == roam_i) {
+                found_roamer = roamer_inst;
+                break;
+            }
+        }
+        if (found_roamer == noone) {
+            found_roamer = instance_create_layer(360 + roam_i * 80, 736, "Instances", obj_teammate_roamer);
+            found_roamer.party_slot = roam_i;
+            found_roamer.target_x = found_roamer.x;
+            found_roamer.wait_timer = irandom_range(30, 120);
+        }
+    }
+}
+
+if (room == room_surface && !global.combat_active && variable_global_exists("teammate_roster")) {
+    var follow_number = 0;
+    for (var follow_i = 0; follow_i < array_length(global.teammate_roster); follow_i++) {
+        var follow_recruit = global.teammate_roster[follow_i];
+        if (follow_recruit.active) {
+            var found_follower = noone;
+            var follower_count = instance_number(obj_teammate_follower);
+            for (var follower_i = 0; follower_i < follower_count; follower_i++) {
+                var follower_inst = instance_find(obj_teammate_follower, follower_i);
+                if (follower_inst.party_slot == follow_i) {
+                    found_follower = follower_inst;
+                    break;
+                }
+            }
+            if (found_follower == noone) {
+                found_follower = instance_create_layer(x - 42 - follow_number * 34, y, "Instances", obj_teammate_follower);
+                found_follower.party_slot = follow_i;
+            }
+            found_follower.follow_order = follow_number;
+            follow_number++;
+        }
+    }
+}
+
 if (global.combat_active) {
     vx = 0;
     vy = 0;
+    sprite_index = spr_player_land_idle;
+    image_index = 0;
+    image_speed = 0;
 
     if (global.combat_lunge_timer > 0) {
         global.combat_lunge_timer--;
@@ -22,7 +87,7 @@ if (global.combat_active) {
     x = global.combat_view_x + 220;
     if (global.combat_lunge_side == "party" && global.combat_lunge_index == 0) x += world_lunge_amount;
     y = global.combat_view_y + 330;
-    image_xscale = abs(image_xscale);
+    image_xscale = max(abs(image_xscale), 2.5);
 
     var enemy_slots = [
         [485, 350],
@@ -38,7 +103,7 @@ if (global.combat_active) {
             enemy_inst.x = global.combat_view_x + enemy_slots[e][0];
             if (global.combat_lunge_side == "enemy" && global.combat_lunge_index == e) enemy_inst.x -= world_lunge_amount;
             enemy_inst.y = global.combat_view_y + enemy_slots[e][1];
-            enemy_inst.image_xscale = -abs(enemy_inst.image_xscale);
+            enemy_inst.image_xscale = max(abs(enemy_inst.image_xscale), 1.35);
         }
     }
 
@@ -70,6 +135,12 @@ if (global.combat_active) {
         }
 
         if (global.combat_enemy_actor >= array_length(global.combat_enemies)) {
+            for (var ep = 0; ep < array_length(global.combat_enemies); ep++) {
+                var protected_enemy = global.combat_enemies[ep];
+                if (instance_exists(protected_enemy) && variable_instance_exists(protected_enemy, "enemy_protect")) {
+                    protected_enemy.enemy_protect = max(0, protected_enemy.enemy_protect - 1);
+                }
+            }
             for (var pc = 0; pc < array_length(global.combat_party); pc++) {
                 var cds = global.combat_party[pc].cooldowns;
                 for (var ci = 0; ci < array_length(cds); ci++) {
@@ -85,6 +156,10 @@ if (global.combat_active) {
             global.combat_message = global.combat_party[global.combat_actor].name + " is ready.";
         } else {
             var enemy_attacker = global.combat_enemies[global.combat_enemy_actor];
+            var enemy_name = "Enemy " + string(global.combat_enemy_actor + 1);
+            if (instance_exists(enemy_attacker) && variable_instance_exists(enemy_attacker, "enemy_display_name")) {
+                enemy_name = enemy_attacker.enemy_display_name + " " + string(global.combat_enemy_actor + 1);
+            }
             var live_targets = [];
             for (var ti = 0; ti < array_length(global.combat_party); ti++) {
                 if (global.combat_party[ti].hp > 0) {
@@ -97,15 +172,78 @@ if (global.combat_active) {
             }
 
             if (target_index != -1 && instance_exists(enemy_attacker)) {
-                var edmg = irandom_range(8, 16);
-                if (global.combat_party[target_index].guard) edmg = ceil(edmg * 0.4);
-                global.combat_party[target_index].hp -= edmg;
-                global.combat_lunge_side = "enemy";
-                global.combat_lunge_index = global.combat_enemy_actor;
-                global.combat_lunge_timer = 18;
-                global.combat_message = "Enemy " + string(global.combat_enemy_actor + 1) + " attacks " + global.combat_party[target_index].name + " for " + string(edmg) + ".";
-                if (target_index == 0) {
-                    hp = max(0, global.combat_party[target_index].hp);
+                var role = variable_instance_exists(enemy_attacker, "enemy_role") ? enemy_attacker.enemy_role : "fighter";
+                var acted = false;
+
+                if (role == "shaman") {
+                    var heal_target_enemy = noone;
+                    var lowest_enemy_pct = 1;
+                    for (var shi = 0; shi < array_length(global.combat_enemies); shi++) {
+                        var hurt_enemy = global.combat_enemies[shi];
+                        if (instance_exists(hurt_enemy) && hurt_enemy.hp > 0 && hurt_enemy.hp < hurt_enemy.max_hp) {
+                            var hurt_pct = hurt_enemy.hp / hurt_enemy.max_hp;
+                            if (hurt_pct < lowest_enemy_pct) {
+                                lowest_enemy_pct = hurt_pct;
+                                heal_target_enemy = hurt_enemy;
+                            }
+                        }
+                    }
+
+                    if (heal_target_enemy != noone && lowest_enemy_pct < 0.75 && irandom(99) < 65) {
+                        var enemy_heal = irandom_range(12, 22);
+                        heal_target_enemy.hp = min(heal_target_enemy.max_hp, heal_target_enemy.hp + enemy_heal);
+                        global.combat_message = enemy_name + " mends an ally for " + string(enemy_heal) + ".";
+                        acted = true;
+                    } else if (irandom(99) < 55) {
+                        var guard_choices = [];
+                        for (var shi_guard = 0; shi_guard < array_length(global.combat_enemies); shi_guard++) {
+                            var guard_enemy = global.combat_enemies[shi_guard];
+                            if (instance_exists(guard_enemy) && (!variable_instance_exists(guard_enemy, "enemy_protect") || guard_enemy.enemy_protect <= 0)) {
+                                guard_choices[array_length(guard_choices)] = guard_enemy;
+                            }
+                        }
+
+                        if (array_length(guard_choices) > 0) {
+                            var guarded_enemy = guard_choices[irandom(array_length(guard_choices) - 1)];
+                            guarded_enemy.enemy_protect = 2;
+                            var guarded_name = variable_instance_exists(guarded_enemy, "enemy_display_name") ? guarded_enemy.enemy_display_name : "Enemy";
+                            global.combat_message = enemy_name + " protects a " + guarded_name + ".";
+                            acted = true;
+                        }
+                    }
+                } else if (irandom(99) < 25) {
+                    enemy_attacker.enemy_protect = 2;
+                    global.combat_message = enemy_name + " hardens its guard.";
+                    acted = true;
+                }
+
+                if (!acted) {
+                    var move_roll = irandom(99);
+                    var edmg = irandom_range(8, 16);
+                    var move_text = "attacks";
+
+                    if (role == "shaman") {
+                        edmg = irandom_range(5, 11);
+                        move_text = choose("curses", "hexes");
+                    } else if (move_roll < 25) {
+                        edmg = irandom_range(15, 24);
+                        move_text = "crushes";
+                    } else if (move_roll < 55) {
+                        edmg = irandom_range(7, 13);
+                        move_text = "spits acid at";
+                    } else {
+                        move_text = choose("swipes at", "bites");
+                    }
+
+                    if (global.combat_party[target_index].guard) edmg = ceil(edmg * 0.4);
+                    global.combat_party[target_index].hp -= edmg;
+                    global.combat_lunge_side = "enemy";
+                    global.combat_lunge_index = global.combat_enemy_actor;
+                    global.combat_lunge_timer = 18;
+                    global.combat_message = enemy_name + " " + move_text + " " + global.combat_party[target_index].name + " for " + string(edmg) + ".";
+                    if (target_index == 0) {
+                        hp = max(0, global.combat_party[target_index].hp);
+                    }
                 }
             }
 
@@ -123,19 +261,16 @@ if (global.combat_active) {
                         reset_enemy.x = reset_enemy.combat_return_x;
                         reset_enemy.y = reset_enemy.combat_return_y;
                         reset_enemy.image_xscale = reset_enemy.combat_saved_xscale;
+                        reset_enemy.image_index = 0;
                     }
                 }
                 global.combat_active = false;
                 global.combat_enemy = noone;
                 global.combat_phase = "none";
                 image_xscale = combat_saved_xscale;
-                if (instance_exists(obj_dome)) {
-                    x = obj_dome.x;
-                    y = obj_dome.y;
-                } else {
-                    x = player_spawn_x;
-                    y = player_spawn_y;
-                }
+                x = room_width * 0.5;
+                y = 704;
+                room_goto(room_dome);
                 exit;
             }
 
@@ -158,15 +293,15 @@ if (global.combat_active) {
             var tmy = device_mouse_y_to_gui(0);
             var tgw = display_get_gui_width();
             var enemy_gui_slots = [
-                [tgw - 125, 286],
-                [tgw - 205, 248],
-                [tgw - 285, 286],
-                [tgw - 365, 248]
+                [tgw - 100, 286],
+                [tgw - 260, 248],
+                [tgw - 420, 286],
+                [tgw - 580, 248]
             ];
 
             for (var click_enemy = 0; click_enemy < array_length(global.combat_enemies); click_enemy++) {
                 var click_slot = enemy_gui_slots[click_enemy];
-                if (instance_exists(global.combat_enemies[click_enemy]) && point_in_rectangle(tmx, tmy, click_slot[0] - 54, click_slot[1] - 70, click_slot[0] + 54, click_slot[1] + 110)) {
+                if (instance_exists(global.combat_enemies[click_enemy]) && point_in_rectangle(tmx, tmy, click_slot[0] - 78, click_slot[1] - 120, click_slot[0] + 78, click_slot[1] + 140)) {
                     selected_enemy = click_enemy;
                 }
             }
@@ -177,6 +312,9 @@ if (global.combat_active) {
             var pending_move = global.combat_moves[global.combat_pending_move];
             var chosen_foe = global.combat_enemies[selected_enemy];
             var target_damage = irandom_range(pending_move.min_value, pending_move.max_value);
+            if (variable_instance_exists(chosen_foe, "enemy_protect") && chosen_foe.enemy_protect > 0) {
+                target_damage = ceil(target_damage * 0.5);
+            }
             chosen_foe.hp -= target_damage;
             pending_actor.cooldowns[global.combat_pending_move] = pending_move.cooldown;
             global.combat_lunge_side = "party";
@@ -341,6 +479,8 @@ if (place_meeting(x, y, obj_enemy)) {
                 setup_enemy.combat_return_x = setup_enemy.x;
                 setup_enemy.combat_return_y = setup_enemy.y;
                 setup_enemy.combat_saved_xscale = setup_enemy.image_xscale;
+                setup_enemy.enemy_protect = 0;
+                setup_enemy.image_index = 0;
             }
         }
 
@@ -350,39 +490,29 @@ if (place_meeting(x, y, obj_enemy)) {
                 name: "Diver",
                 hp: hp,
                 max_hp: max_hp,
-                sprite: sprite_index,
-                image: image_index,
-                guard: false,
-                cooldowns: array_create(move_count, 0)
-            },
-            {
-                name: "Mechanic",
-                hp: 80,
-                max_hp: 80,
-                sprite: sprite_index,
-                image: image_index,
-                guard: false,
-                cooldowns: array_create(move_count, 0)
-            },
-            {
-                name: "Scout",
-                hp: 75,
-                max_hp: 75,
-                sprite: sprite_index,
-                image: image_index,
-                guard: false,
-                cooldowns: array_create(move_count, 0)
-            },
-            {
-                name: "Bulwark",
-                hp: 110,
-                max_hp: 110,
-                sprite: sprite_index,
-                image: image_index,
+                sprite: spr_player_land_idle,
+                image: 0,
                 guard: false,
                 cooldowns: array_create(move_count, 0)
             }
         ];
+        if (!variable_global_exists("teammate_roster")) {
+            global.teammate_roster = [];
+        }
+        for (var party_member_i = 0; party_member_i < array_length(global.teammate_roster); party_member_i++) {
+            var recruit = global.teammate_roster[party_member_i];
+            if (array_length(global.combat_party) < 4 && recruit.active) {
+                global.combat_party[array_length(global.combat_party)] = {
+                    name: recruit.name,
+                    hp: recruit.hp,
+                    max_hp: recruit.max_hp,
+                    sprite: recruit.sprite,
+                    image: 0,
+                    guard: false,
+                    cooldowns: array_create(move_count, 0)
+                };
+            }
+        }
 
         global.combat_active = true;
         global.combat_enemy = foe_touch;
@@ -425,15 +555,7 @@ if (move_right)
 }
 
 var player_is_moving = (vx != 0 || vy != 0);
-var player_in_dome = false;
-if (room == room_ocean && instance_exists(obj_dome) && instance_exists(obj_resource_manager)) {
-    var anim_dm = obj_dome;
-    var anim_rm = obj_resource_manager;
-    var anim_dx = (x - anim_dm.x) / anim_rm.dome_width;
-    var anim_dy = (y - anim_dm.y) / anim_rm.dome_height;
-    player_in_dome = ((anim_dx * anim_dx) + (anim_dy * anim_dy) < 1);
-}
-var player_in_water = (room == room_ocean && !player_in_dome);
+var player_in_water = (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1);
 
 if (player_is_moving)
 {
@@ -478,22 +600,11 @@ y += vy;
 x = clamp(x, 14, room_width - 14);
 
 // Oxygen logic
-if (room == room_ocean) {
-    var inside_dome = false;
-    if (instance_exists(obj_dome)) {
-        var dm = obj_dome;
-        var rm = obj_resource_manager;
-        var dx = (x - dm.x) / rm.dome_width;
-        var dy = (y - dm.y) / rm.dome_height;
-        inside_dome = ((dx * dx) + (dy * dy) < 1);
-    }
-    
-    if (inside_dome) {
+if (room == room_dome) {
     oxygen = min(100, oxygen + ox_refill);
-        } else {
+} else if (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1) {
     oxygen -= ox_drain;
-    }
-    }  
+}
     
     if (oxygen <= 0) {
     oxygen = 100;
@@ -504,10 +615,9 @@ if (room == room_ocean) {
         obj_resource_manager.crystal  = 0;
         obj_resource_manager.obsidian = 0;
     }
-    if (instance_exists(obj_dome)) {
-        x = obj_dome.x;
-        y = obj_dome.y;
-    }
+    x = room_width * 0.5;
+    y = 704;
+    room_goto(room_dome);
 }
 
 
@@ -521,13 +631,15 @@ if (instance_exists(obj_submarine)) {
 }
 
 if (interact && near_sub) {
-    if (room == room_ocean) {
-        player_spawn_x = 200;
-        player_spawn_y = 500;
+    vx = 0;
+    vy = 0;
+    if (room == room_ocean_floor_right_1) {
+        x = 192;
+        y = 704;
         room_goto(room_surface);
     } else if (room == room_surface) {
-        player_spawn_x = 340;
-        player_spawn_y = 2300;
-        room_goto(room_ocean);
+        x = 352;
+        y = 704;
+        room_goto(room_ocean_floor_right_1);
     }
 }
