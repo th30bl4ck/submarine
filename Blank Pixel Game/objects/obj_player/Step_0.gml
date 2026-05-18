@@ -55,7 +55,7 @@ if (room == room_surface && !global.combat_active && variable_global_exists("tea
                 }
             }
             if (found_follower == noone) {
-                found_follower = instance_create_layer(x - 42 - follow_number * 34, y, "Instances", obj_teammate_follower);
+                found_follower = instance_create_layer(x - 42 - follow_number * 34, y + 28, "Instances", obj_teammate_follower);
                 found_follower.party_slot = follow_i;
             }
             found_follower.follow_order = follow_number;
@@ -75,6 +75,19 @@ if (global.combat_active) {
         global.combat_lunge_timer--;
     }
 
+    if (!variable_global_exists("combat_float_texts")) {
+        global.combat_float_texts = [];
+    }
+    for (var float_i = array_length(global.combat_float_texts) - 1; float_i >= 0; float_i--) {
+        var float_data = global.combat_float_texts[float_i];
+        float_data.timer -= 1;
+        float_data.yoff -= 0.8;
+        global.combat_float_texts[float_i] = float_data;
+        if (float_data.timer <= 0) {
+            array_delete(global.combat_float_texts, float_i, 1);
+        }
+    }
+
     var world_lunge_amount = 0;
     if (global.combat_lunge_timer > 0) {
         if (global.combat_lunge_timer > 9) {
@@ -90,10 +103,10 @@ if (global.combat_active) {
     image_xscale = max(abs(image_xscale), 2.5);
 
     var enemy_slots = [
-        [485, 350],
+        [725, 315],
         [565, 315],
         [645, 350],
-        [725, 315]
+        [485, 350]
     ];
 
     var e_count = array_length(global.combat_enemies);
@@ -112,20 +125,45 @@ if (global.combat_active) {
     }
 
     if (global.combat_phase == "player_wait" && global.combat_timer <= 0) {
-        var next_actor = global.combat_actor + 1;
-        while (next_actor < array_length(global.combat_party) && global.combat_party[next_actor].hp <= 0) {
-            next_actor++;
+        while (global.combat_enemy_actor < array_length(global.combat_enemies) && !instance_exists(global.combat_enemies[global.combat_enemy_actor])) {
+            global.combat_enemy_actor++;
         }
 
-        if (next_actor < array_length(global.combat_party)) {
-            global.combat_actor = next_actor;
-            global.combat_phase = "player_select";
-            global.combat_message = global.combat_party[global.combat_actor].name + " is ready.";
-        } else {
-            global.combat_enemy_actor = 0;
+        if (global.combat_enemy_actor < array_length(global.combat_enemies)) {
             global.combat_phase = "enemy_wait";
-            global.combat_timer = 90;
-            global.combat_message = "The enemy team gathers itself...";
+            global.combat_timer = 30;
+        } else {
+            var extra_actor = global.combat_actor + 1;
+            while (extra_actor < array_length(global.combat_party) && global.combat_party[extra_actor].hp <= 0) {
+                extra_actor++;
+            }
+
+            if (extra_actor < array_length(global.combat_party)) {
+                global.combat_actor = extra_actor;
+                global.combat_phase = "player_select";
+                global.combat_message = global.combat_party[global.combat_actor].name + " is ready.";
+            } else {
+                for (var ep = 0; ep < array_length(global.combat_enemies); ep++) {
+                    var protected_enemy = global.combat_enemies[ep];
+                    if (instance_exists(protected_enemy) && variable_instance_exists(protected_enemy, "enemy_protect")) {
+                        protected_enemy.enemy_protect = max(0, protected_enemy.enemy_protect - 1);
+                    }
+                }
+                for (var pc = 0; pc < array_length(global.combat_party); pc++) {
+                    var cds = global.combat_party[pc].cooldowns;
+                    for (var ci = 0; ci < array_length(cds); ci++) {
+                        cds[ci] = max(0, cds[ci] - 1);
+                    }
+                    global.combat_party[pc].guard = false;
+                }
+                global.combat_enemy_actor = 0;
+                global.combat_actor = 0;
+                while (global.combat_actor < array_length(global.combat_party) && global.combat_party[global.combat_actor].hp <= 0) {
+                    global.combat_actor++;
+                }
+                global.combat_phase = "player_select";
+                global.combat_message = global.combat_party[global.combat_actor].name + " is ready.";
+            }
         }
     }
 
@@ -156,9 +194,9 @@ if (global.combat_active) {
             global.combat_message = global.combat_party[global.combat_actor].name + " is ready.";
         } else {
             var enemy_attacker = global.combat_enemies[global.combat_enemy_actor];
-            var enemy_name = "Enemy " + string(global.combat_enemy_actor + 1);
+            var enemy_name = "Enemy";
             if (instance_exists(enemy_attacker) && variable_instance_exists(enemy_attacker, "enemy_display_name")) {
-                enemy_name = enemy_attacker.enemy_display_name + " " + string(global.combat_enemy_actor + 1);
+                enemy_name = enemy_attacker.enemy_display_name;
             }
             var live_targets = [];
             for (var ti = 0; ti < array_length(global.combat_party); ti++) {
@@ -192,6 +230,11 @@ if (global.combat_active) {
                     if (heal_target_enemy != noone && lowest_enemy_pct < 0.75 && irandom(99) < 65) {
                         var enemy_heal = irandom_range(12, 22);
                         heal_target_enemy.hp = min(heal_target_enemy.max_hp, heal_target_enemy.hp + enemy_heal);
+                        var heal_enemy_index = 0;
+                        for (var heal_find_i = 0; heal_find_i < array_length(global.combat_enemies); heal_find_i++) {
+                            if (global.combat_enemies[heal_find_i] == heal_target_enemy) heal_enemy_index = heal_find_i;
+                        }
+                        global.combat_float_texts[array_length(global.combat_float_texts)] = { side: "enemy", index: heal_enemy_index, text: "+" + string(enemy_heal), col: make_colour_rgb(80, 240, 120), timer: 48, yoff: 0 };
                         global.combat_message = enemy_name + " mends an ally for " + string(enemy_heal) + ".";
                         acted = true;
                     } else if (irandom(99) < 55) {
@@ -237,6 +280,7 @@ if (global.combat_active) {
 
                     if (global.combat_party[target_index].guard) edmg = ceil(edmg * 0.4);
                     global.combat_party[target_index].hp -= edmg;
+                    global.combat_float_texts[array_length(global.combat_float_texts)] = { side: "party", index: target_index, text: "-" + string(edmg), col: make_colour_rgb(255, 80, 70), timer: 48, yoff: 0 };
                     global.combat_lunge_side = "enemy";
                     global.combat_lunge_index = global.combat_enemy_actor;
                     global.combat_lunge_timer = 18;
@@ -275,7 +319,19 @@ if (global.combat_active) {
             }
 
             global.combat_enemy_actor++;
-            global.combat_timer = 75;
+            var follow_actor = global.combat_actor + 1;
+            while (follow_actor < array_length(global.combat_party) && global.combat_party[follow_actor].hp <= 0) {
+                follow_actor++;
+            }
+            if (follow_actor < array_length(global.combat_party)) {
+                global.combat_actor = follow_actor;
+                global.combat_phase = "player_select";
+                global.combat_message = global.combat_party[global.combat_actor].name + " is ready.";
+            } else {
+                global.combat_actor = 0;
+                global.combat_phase = "player_wait";
+                global.combat_timer = 35;
+            }
         }
     }
 
@@ -293,7 +349,7 @@ if (global.combat_active) {
             var tmy = device_mouse_y_to_gui(0);
             var tgw = display_get_gui_width();
             var enemy_gui_slots = [
-                [tgw - 100, 286],
+                [tgw - 100, 248],
                 [tgw - 260, 248],
                 [tgw - 420, 286],
                 [tgw - 580, 248]
@@ -316,11 +372,13 @@ if (global.combat_active) {
                 target_damage = ceil(target_damage * 0.5);
             }
             chosen_foe.hp -= target_damage;
+            global.combat_float_texts[array_length(global.combat_float_texts)] = { side: "enemy", index: selected_enemy, text: "-" + string(target_damage), col: make_colour_rgb(255, 80, 70), timer: 48, yoff: 0 };
             pending_actor.cooldowns[global.combat_pending_move] = pending_move.cooldown;
             global.combat_lunge_side = "party";
             global.combat_lunge_index = global.combat_actor;
             global.combat_lunge_timer = 18;
-            global.combat_message = pending_actor.name + " hits Enemy " + string(selected_enemy + 1) + " with " + pending_move.name + " for " + string(target_damage) + ".";
+            var chosen_name = variable_instance_exists(chosen_foe, "enemy_display_name") ? chosen_foe.enemy_display_name : "Enemy";
+            global.combat_message = pending_actor.name + " hits " + chosen_name + " with " + pending_move.name + " for " + string(target_damage) + ".";
             global.combat_pending_move = -1;
 
             var targeted_enemies_alive = false;
@@ -411,6 +469,7 @@ if (global.combat_active) {
                 }
                 var heal = irandom_range(move_data.min_value, move_data.max_value);
                 global.combat_party[heal_target].hp = min(global.combat_party[heal_target].max_hp, global.combat_party[heal_target].hp + heal);
+                global.combat_float_texts[array_length(global.combat_float_texts)] = { side: "party", index: heal_target, text: "+" + string(heal), col: make_colour_rgb(80, 240, 120), timer: 48, yoff: 0 };
                 if (heal_target == 0) hp = global.combat_party[heal_target].hp;
                 global.combat_message = actor_data.name + " repairs " + global.combat_party[heal_target].name + " for " + string(heal) + ".";
             } else if (move_data.kind == "guard") {
@@ -484,6 +543,43 @@ if (place_meeting(x, y, obj_enemy)) {
             }
         }
 
+        for (var sort_i = 0; sort_i < array_length(global.combat_enemies); sort_i++) {
+            for (var sort_j = sort_i + 1; sort_j < array_length(global.combat_enemies); sort_j++) {
+                var enemy_a = global.combat_enemies[sort_i];
+                var enemy_b = global.combat_enemies[sort_j];
+                var a_shaman = instance_exists(enemy_a) && variable_instance_exists(enemy_a, "enemy_role") && enemy_a.enemy_role == "shaman";
+                var b_shaman = instance_exists(enemy_b) && variable_instance_exists(enemy_b, "enemy_role") && enemy_b.enemy_role == "shaman";
+                if (!a_shaman && b_shaman) {
+                    global.combat_enemies[sort_i] = enemy_b;
+                    global.combat_enemies[sort_j] = enemy_a;
+                }
+            }
+        }
+
+        var unique_enemy_names = ["Brinejaw", "Kelpmaw", "Riftclaw", "Siltfang", "Gloomfin", "Reefbite", "Murktooth", "Abyssal", "Chanter", "Caller", "Mireseer", "Saltwitch"];
+        var used_enemy_names = [];
+        for (var name_i = 0; name_i < array_length(global.combat_enemies); name_i++) {
+            var named_enemy = global.combat_enemies[name_i];
+            if (instance_exists(named_enemy)) {
+                var current_name = variable_instance_exists(named_enemy, "enemy_display_name") ? named_enemy.enemy_display_name : "Enemy";
+                var duplicate_name = false;
+                for (var used_i = 0; used_i < array_length(used_enemy_names); used_i++) {
+                    if (used_enemy_names[used_i] == current_name) duplicate_name = true;
+                }
+
+                while (duplicate_name) {
+                    current_name = unique_enemy_names[irandom(array_length(unique_enemy_names) - 1)];
+                    duplicate_name = false;
+                    for (var check_i = 0; check_i < array_length(used_enemy_names); check_i++) {
+                        if (used_enemy_names[check_i] == current_name) duplicate_name = true;
+                    }
+                }
+
+                named_enemy.enemy_display_name = current_name;
+                used_enemy_names[array_length(used_enemy_names)] = current_name;
+            }
+        }
+
         var move_count = array_length(global.combat_moves);
         global.combat_party = [
             {
@@ -522,6 +618,7 @@ if (place_meeting(x, y, obj_enemy)) {
         global.combat_timer = 0;
         global.combat_lunge_timer = 0;
         global.combat_pending_move = -1;
+        global.combat_float_texts = [];
         global.combat_message = "An enemy team blocks the path.";
         global.combat_guard = false;
         global.combat_selected_move = 0;
