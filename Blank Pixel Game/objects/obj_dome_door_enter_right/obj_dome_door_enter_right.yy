@@ -9,8 +9,8 @@
   "name":"obj_dome_door_enter_right",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"dome_door_objects",
+    "path":"folders/Objects/dome_objects/dome_door_objects.yy",
   },
   "parentObjectId":null,
   "persistent":false,

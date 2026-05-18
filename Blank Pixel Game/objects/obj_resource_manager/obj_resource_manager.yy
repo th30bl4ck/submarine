@@ -8,8 +8,8 @@
   "name":"obj_resource_manager",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"hidden_objects",
+    "path":"folders/Objects/hidden_objects.yy",
   },
   "parentObjectId":null,
   "persistent":true,
