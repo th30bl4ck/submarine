@@ -1,5 +1,9 @@
 var dist = point_distance(x, y, obj_player.x, obj_player.y);
 
+if (!instance_exists(obj_resource_manager)) {
+    instance_create_depth(0, 0, 0, obj_resource_manager);
+}
+
 if (dist < interact_range) {
     show_prompt = true;
 
@@ -34,15 +38,8 @@ if (dist < interact_range) {
                 rm.obsidian -= cost_obsidian;
                 rm.dome_level++;
 
-                // Grow the dome
                 rm.dome_width  += 120;
                 rm.dome_height += 80;
-
-
-                with (obj_dome) {
-                    image_xscale = rm.dome_width  / (sprite_width  / 2);
-                    image_yscale = rm.dome_height / (sprite_height / 2);
-                }
 
                 show_menu = false;
             }
