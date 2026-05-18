@@ -2,6 +2,68 @@ if (!variable_global_exists("combat_active")) {
     global.combat_active = false;
 }
 
+if (room != room_surface) {
+    with (obj_teammate_follower) instance_destroy();
+} else if (instance_exists(obj_teammate_follower)) {
+    with (obj_teammate_follower) {
+        if (party_slot < 0 || !variable_global_exists("teammate_roster") || party_slot >= array_length(global.teammate_roster) || !global.teammate_roster[party_slot].active) {
+            instance_destroy();
+        }
+    }
+}
+
+if (room != room_dome) {
+    with (obj_teammate_roamer) instance_destroy();
+} else if (variable_global_exists("teammate_roster")) {
+    for (var roam_cleanup_i = 0; roam_cleanup_i < instance_number(obj_teammate_roamer); roam_cleanup_i++) {
+        var cleanup_roamer = instance_find(obj_teammate_roamer, roam_cleanup_i);
+        if (cleanup_roamer.party_slot < 0 || cleanup_roamer.party_slot >= array_length(global.teammate_roster)) {
+            with (cleanup_roamer) instance_destroy();
+        }
+    }
+
+    for (var roam_i = 0; roam_i < array_length(global.teammate_roster); roam_i++) {
+        var found_roamer = noone;
+        for (var roam_find_i = 0; roam_find_i < instance_number(obj_teammate_roamer); roam_find_i++) {
+            var roamer_inst = instance_find(obj_teammate_roamer, roam_find_i);
+            if (roamer_inst.party_slot == roam_i) {
+                found_roamer = roamer_inst;
+                break;
+            }
+        }
+        if (found_roamer == noone) {
+            found_roamer = instance_create_layer(360 + roam_i * 80, 736, "Instances", obj_teammate_roamer);
+            found_roamer.party_slot = roam_i;
+            found_roamer.target_x = found_roamer.x;
+            found_roamer.wait_timer = irandom_range(30, 120);
+        }
+    }
+}
+
+if (room == room_surface && !global.combat_active && variable_global_exists("teammate_roster")) {
+    var follow_number = 0;
+    for (var follow_i = 0; follow_i < array_length(global.teammate_roster); follow_i++) {
+        var follow_recruit = global.teammate_roster[follow_i];
+        if (follow_recruit.active) {
+            var found_follower = noone;
+            var follower_count = instance_number(obj_teammate_follower);
+            for (var follower_i = 0; follower_i < follower_count; follower_i++) {
+                var follower_inst = instance_find(obj_teammate_follower, follower_i);
+                if (follower_inst.party_slot == follow_i) {
+                    found_follower = follower_inst;
+                    break;
+                }
+            }
+            if (found_follower == noone) {
+                found_follower = instance_create_layer(x - 42 - follow_number * 34, y, "Instances", obj_teammate_follower);
+                found_follower.party_slot = follow_i;
+            }
+            found_follower.follow_order = follow_number;
+            follow_number++;
+        }
+    }
+}
+
 if (global.combat_active) {
     vx = 0;
     vy = 0;
@@ -206,13 +268,9 @@ if (global.combat_active) {
                 global.combat_enemy = noone;
                 global.combat_phase = "none";
                 image_xscale = combat_saved_xscale;
-                if (instance_exists(obj_dome)) {
-                    x = obj_dome.x;
-                    y = obj_dome.y;
-                } else {
-                    x = player_spawn_x;
-                    y = player_spawn_y;
-                }
+                x = room_width * 0.5;
+                y = 704;
+                room_goto(room_dome);
                 exit;
             }
 
@@ -497,15 +555,7 @@ if (move_right)
 }
 
 var player_is_moving = (vx != 0 || vy != 0);
-var player_in_dome = false;
-if (room == room_ocean && instance_exists(obj_dome) && instance_exists(obj_resource_manager)) {
-    var anim_dm = obj_dome;
-    var anim_rm = obj_resource_manager;
-    var anim_dx = (x - anim_dm.x) / anim_rm.dome_width;
-    var anim_dy = (y - anim_dm.y) / anim_rm.dome_height;
-    player_in_dome = ((anim_dx * anim_dx) + (anim_dy * anim_dy) < 1);
-}
-var player_in_water = (room == room_ocean && !player_in_dome);
+var player_in_water = (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1);
 
 if (player_is_moving)
 {
@@ -550,22 +600,11 @@ y += vy;
 x = clamp(x, 14, room_width - 14);
 
 // Oxygen logic
-if (room == room_ocean) {
-    var inside_dome = false;
-    if (instance_exists(obj_dome)) {
-        var dm = obj_dome;
-        var rm = obj_resource_manager;
-        var dx = (x - dm.x) / rm.dome_width;
-        var dy = (y - dm.y) / rm.dome_height;
-        inside_dome = ((dx * dx) + (dy * dy) < 1);
-    }
-    
-    if (inside_dome) {
+if (room == room_dome) {
     oxygen = min(100, oxygen + ox_refill);
-        } else {
+} else if (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1) {
     oxygen -= ox_drain;
-    }
-    }  
+}
     
     if (oxygen <= 0) {
     oxygen = 100;
@@ -576,10 +615,9 @@ if (room == room_ocean) {
         obj_resource_manager.crystal  = 0;
         obj_resource_manager.obsidian = 0;
     }
-    if (instance_exists(obj_dome)) {
-        x = obj_dome.x;
-        y = obj_dome.y;
-    }
+    x = room_width * 0.5;
+    y = 704;
+    room_goto(room_dome);
 }
 
 
@@ -593,13 +631,15 @@ if (instance_exists(obj_submarine)) {
 }
 
 if (interact && near_sub) {
-    if (room == room_ocean) {
-        player_spawn_x = 200;
-        player_spawn_y = 500;
+    vx = 0;
+    vy = 0;
+    if (room == room_ocean_floor_right_1) {
+        x = 192;
+        y = 704;
         room_goto(room_surface);
     } else if (room == room_surface) {
-        player_spawn_x = 340;
-        player_spawn_y = 2300;
-        room_goto(room_ocean);
+        x = 352;
+        y = 704;
+        room_goto(room_ocean_floor_right_1);
     }
 }

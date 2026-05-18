@@ -2,6 +2,9 @@ globalvar WATER_Y, player_spawn_x, player_spawn_y;
 WATER_Y = 800;
 player_spawn_x = 200;
 player_spawn_y = 2300;
+if (!instance_exists(obj_resource_manager)) {
+    instance_create_depth(0, 0, 0, obj_resource_manager);
+}
 global.combat_active = false;
 global.combat_enemy = noone;
 global.combat_turn = "player";

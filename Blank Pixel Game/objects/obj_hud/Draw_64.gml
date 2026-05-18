@@ -1,7 +1,15 @@
 if (!instance_exists(obj_player)) exit;
 // Zone label
 
-if (room == room_ocean) {
+if (room == room_dome) {
+    draw_set_colour(c_aqua);
+    draw_text(10, 10, "DOME - Safe");
+} else if (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1) {
+    draw_set_colour(make_colour_rgb(255, 170, 30));
+    draw_text(10, 10, "OCEAN FLOOR - Oxygen depleting");
+}
+
+if (false) {
     var inside_dome = false;
     if (instance_exists(obj_dome) && instance_exists(obj_resource_manager)) {
         var dm = obj_dome;
@@ -69,51 +77,57 @@ if (instance_exists(obj_resource_manager)) {
 }
 
 if (!variable_global_exists("combat_active") || !global.combat_active) {
-    var prompt_y = display_get_gui_height() - 120;
-
-    if (variable_global_exists("teammate_recruit_near") && global.teammate_recruit_near) {
-        draw_set_colour(c_white);
-        draw_text(250, prompt_y, "E Recruit teammate to storage");
-    }
-
-    if (variable_global_exists("teammate_manager_near") && global.teammate_manager_near && (!variable_global_exists("teammate_menu_open") || !global.teammate_menu_open)) {
-        draw_set_colour(c_white);
-        draw_text(250, prompt_y + 22, "E Manage party");
-    }
-
     if (variable_global_exists("teammate_menu_open") && global.teammate_menu_open) {
-        var menu_x = 260;
-        var menu_y = 110;
-        var menu_w = 360;
+        var gui_w_menu = display_get_gui_width();
+        var menu_w = min(560, gui_w_menu - 80);
+        var menu_x = (gui_w_menu - menu_w) * 0.5;
+        var menu_y = 86;
+        var row_h = 38;
         var roster_count = variable_global_exists("teammate_roster") ? array_length(global.teammate_roster) : 0;
+        var visible_roster = min(roster_count, 9);
+        var menu_h = 142 + max(1, visible_roster) * row_h;
         var active_count = 0;
         for (var active_i = 0; active_i < roster_count; active_i++) {
             if (global.teammate_roster[active_i].active) active_count++;
         }
 
-        draw_set_alpha(0.86);
-        draw_set_colour(make_colour_rgb(12, 14, 20));
-        draw_rectangle(menu_x, menu_y, menu_x + menu_w, menu_y + 120 + max(1, roster_count) * 28, false);
+        draw_set_alpha(0.9);
+        draw_set_colour(make_colour_rgb(10, 15, 24));
+        draw_rectangle(menu_x, menu_y, menu_x + menu_w, menu_y + menu_h, false);
+        draw_set_alpha(0.5);
+        draw_set_colour(make_colour_rgb(28, 37, 52));
+        draw_rectangle(menu_x + 10, menu_y + 52, menu_x + menu_w - 10, menu_y + menu_h - 10, false);
         draw_set_alpha(1);
-        draw_set_colour(make_colour_rgb(150, 130, 100));
-        draw_rectangle(menu_x, menu_y, menu_x + menu_w, menu_y + 120 + max(1, roster_count) * 28, true);
+        draw_set_colour(make_colour_rgb(132, 154, 178));
+        draw_rectangle(menu_x, menu_y, menu_x + menu_w, menu_y + menu_h, true);
+        draw_set_colour(make_colour_rgb(74, 96, 120));
+        draw_line(menu_x + 16, menu_y + 74, menu_x + menu_w - 16, menu_y + 74);
 
         draw_set_colour(c_white);
-        draw_text(menu_x + 18, menu_y + 16, "PARTY MANAGER");
-        draw_set_colour(make_colour_rgb(190, 190, 190));
-        draw_text(menu_x + 18, menu_y + 40, "Party: Diver + " + string(active_count) + "/3 teammates");
-        draw_text(menu_x + 18, menu_y + 62, "Press 1-9 to move recruits between party and storage");
+        draw_text(menu_x + 24, menu_y + 16, "PARTY MANAGER");
+        draw_set_colour(make_colour_rgb(170, 210, 190));
+        draw_text(menu_x + menu_w - 150, menu_y + 18, "Party " + string(active_count) + "/3");
+        draw_set_colour(make_colour_rgb(190, 198, 208));
+        draw_text(menu_x + 24, menu_y + 46, "Press 1-9 to toggle recruits");
 
         if (roster_count <= 0) {
             draw_set_colour(make_colour_rgb(180, 180, 180));
-            draw_text(menu_x + 18, menu_y + 96, "No teammates in storage yet.");
+            draw_text(menu_x + 24, menu_y + 98, "No teammates in storage yet.");
         } else {
-            for (var roster_i = 0; roster_i < min(roster_count, 9); roster_i++) {
+            for (var roster_i = 0; roster_i < visible_roster; roster_i++) {
                 var recruit = global.teammate_roster[roster_i];
-                var row_y = menu_y + 96 + roster_i * 28;
-                draw_set_colour(recruit.active ? make_colour_rgb(120, 230, 150) : make_colour_rgb(190, 190, 190));
-                draw_text(menu_x + 18, row_y, string(roster_i + 1) + " " + recruit.name + " HP " + string(recruit.max_hp));
-                draw_text(menu_x + 230, row_y, recruit.active ? "Party" : "Storage");
+                var row_y = menu_y + 88 + roster_i * row_h;
+                draw_set_colour(recruit.active ? make_colour_rgb(26, 58, 48) : make_colour_rgb(22, 28, 38));
+                draw_rectangle(menu_x + 18, row_y, menu_x + menu_w - 18, row_y + row_h - 6, false);
+                draw_set_colour(recruit.active ? make_colour_rgb(92, 184, 132) : make_colour_rgb(74, 86, 102));
+                draw_rectangle(menu_x + 18, row_y, menu_x + menu_w - 18, row_y + row_h - 6, true);
+
+                draw_set_colour(c_white);
+                draw_text(menu_x + 32, row_y + 8, string(roster_i + 1) + ". " + recruit.name);
+                draw_set_colour(make_colour_rgb(190, 198, 208));
+                draw_text(menu_x + 220, row_y + 8, "HP " + string(recruit.max_hp));
+                draw_set_colour(recruit.active ? make_colour_rgb(130, 240, 165) : make_colour_rgb(170, 178, 190));
+                draw_text(menu_x + menu_w - 112, row_y + 8, recruit.active ? "Equipped" : "Storage");
             }
         }
     }
@@ -173,7 +187,7 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
         draw_set_colour(make_colour_rgb(80, 70, 62));
         draw_ellipse(px - 62, py + 58, px + 62, py + 86, false);
         draw_set_alpha(member.hp > 0 ? 1 : 0.35);
-        draw_sprite_ext(member.sprite, member.image, px, py, combat_draw_scale, combat_draw_scale, 0, c_white, 1);
+        draw_sprite_ext(member.sprite, member.image, px, py + 20, combat_draw_scale, combat_draw_scale, 0, c_white, 1);
         draw_set_alpha(1);
 
         var hp_pct = max(0, member.hp) / member.max_hp;
@@ -196,7 +210,7 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
             draw_set_colour(make_colour_rgb(80, 70, 62));
             draw_ellipse(ex - 62, ey + 58, ex + 62, ey + 86, false);
             draw_set_alpha(1);
-            draw_sprite_ext(foe.sprite_index, foe.image_index, ex, ey, combat_draw_scale, combat_draw_scale, 0, c_white, 1);
+            draw_sprite_ext(foe.sprite_index, foe.image_index, ex, ey + 20, combat_draw_scale, combat_draw_scale, 0, c_white, 1);
 
             var enemy_hp_pct = max(0, foe.hp) / foe.max_hp;
             draw_set_colour(c_dkgray);

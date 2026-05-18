@@ -1,0 +1,11 @@
+party_slot = -1;
+follow_order = 0;
+move_speed = 0.42;
+max_follow_speed = 5.5;
+vx = 0;
+vy = 0;
+sprite_index = spr_survivor_1_idle;
+image_index = 0;
+image_speed = 0;
+image_xscale = 2;
+image_yscale = 2;

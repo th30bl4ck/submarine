@@ -26,7 +26,7 @@ if (recruit_index == 0) {
 }
 global.teammates_found++;
 
-sprite_index = spr_mineral_obsidian;
+sprite_index = spr_survivor_1_idle;
 image_index = 0;
 image_speed = 0;
 image_xscale = 2;

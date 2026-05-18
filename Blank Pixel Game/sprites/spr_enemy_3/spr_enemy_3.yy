@@ -24,7 +24,7 @@
   ],
   "name":"spr_enemy_3",
   "nineSlice":null,
-  "origin":4,
+  "origin":9,
   "parent":{
     "name":"enemy_sprites",
     "path":"folders/Sprites/enemy_sprites.yy",
@@ -79,7 +79,7 @@
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":32,
+    "xorigin":39,
     "yorigin":32,
   },
   "swatchColours":null,
