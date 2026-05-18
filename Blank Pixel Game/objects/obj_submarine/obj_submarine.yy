@@ -10,8 +10,8 @@
   "name":"obj_submarine",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"dome_objects",
+    "path":"folders/Objects/dome_objects.yy",
   },
   "parentObjectId":null,
   "persistent":false,
