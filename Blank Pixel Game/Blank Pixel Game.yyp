@@ -86,6 +86,8 @@
     {"id":{"name":"spr_shamen","path":"sprites/spr_shamen/spr_shamen.yy",},},
     {"id":{"name":"spr_survivor_1_idle","path":"sprites/spr_survivor_1_idle/spr_survivor_1_idle.yy",},},
     {"id":{"name":"spr_survivor_1_walking","path":"sprites/spr_survivor_1_walking/spr_survivor_1_walking.yy",},},
+    {"id":{"name":"spr_survivor_2_idle","path":"sprites/spr_survivor_2_idle/spr_survivor_2_idle.yy",},},
+    {"id":{"name":"spr_survivor_2_walking","path":"sprites/spr_survivor_2_walking/spr_survivor_2_walking.yy",},},
     {"id":{"name":"spr_survivor_hotel_werfull","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},},
     {"id":{"name":"spr_Survivror_hotel_Vacancy","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},},
     {"id":{"name":"spr_upgrade_station","path":"sprites/spr_upgrade_station/spr_upgrade_station.yy",},},
