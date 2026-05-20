@@ -4,7 +4,7 @@
   "bboxMode":0,
   "bbox_bottom":242,
   "bbox_left":8,
-  "bbox_right":1015,
+  "bbox_right":119,
   "bbox_top":5,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,21 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"ffcca438-5d6d-4c6f-9a9d-0e1cb52e7c56","name":"ffcca438-5d6d-4c6f-9a9d-0e1cb52e7c56","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"15c2e547-7939-40ce-9e5d-dd0ac2ef3987","name":"15c2e547-7939-40ce-9e5d-dd0ac2ef3987","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a4df4814-84bb-42d7-afb7-b335882adaa9","name":"a4df4814-84bb-42d7-afb7-b335882adaa9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"9133a764-86df-4a44-bb71-42df3d237018","name":"9133a764-86df-4a44-bb71-42df3d237018","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"fef1d0a1-9598-4d1f-932c-43d246f3e103","name":"fef1d0a1-9598-4d1f-932c-43d246f3e103","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"29f478d2-24a8-4733-8955-0cfd2ca02888","name":"29f478d2-24a8-4733-8955-0cfd2ca02888","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"240e186e-652e-400f-be8b-639765121bdb","name":"240e186e-652e-400f-be8b-639765121bdb","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"51bd337e-c41a-4b72-b165-b5bfa89591ca","name":"51bd337e-c41a-4b72-b165-b5bfa89591ca","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"66a88562-4cbf-4977-9931-6831765a5f79","name":"66a88562-4cbf-4977-9931-6831765a5f79","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":256,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"4ebe4dd2-9ac3-4903-b427-026e2667d167","blendMode":0,"displayName":"default","isLocked":false,"name":"4ebe4dd2-9ac3-4903-b427-026e2667d167","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"5c7de462-494d-4790-b85d-e39d1f083aa0","blendMode":0,"displayName":"default","isLocked":false,"name":"5c7de462-494d-4790-b85d-e39d1f083aa0","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_survivor_hotel_werfull",
   "nineSlice":null,
@@ -49,7 +56,7 @@
     },
     "eventStubScript":null,
     "eventToFunction":{},
-    "length":1.0,
+    "length":8.0,
     "lockOrigin":false,
     "moments":{
       "$KeyframeStore<MomentsEventKeyframe>":"",
@@ -69,8 +76,29 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"ffcca438-5d6d-4c6f-9a9d-0e1cb52e7c56","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"fa32b843-f1fc-418d-a49b-9a3dffe9873a","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"15c2e547-7939-40ce-9e5d-dd0ac2ef3987","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"b36ce77f-3807-4a3f-bdcf-64721c23f448","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"a4df4814-84bb-42d7-afb7-b335882adaa9","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"c72c7dcd-815a-4238-aae7-c070f8b1a28e","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"9133a764-86df-4a44-bb71-42df3d237018","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"ebc44d4b-8ec5-46e9-8ac4-3aaaf0303694","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"fef1d0a1-9598-4d1f-932c-43d246f3e103","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"4ed11d5d-1de6-437f-aaab-1744a8a9cd75","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"29f478d2-24a8-4733-8955-0cfd2ca02888","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"0a6bbae9-2d7c-433c-8c31-ce58cc8e0458","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"240e186e-652e-400f-be8b-639765121bdb","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"3dd6cb23-9b06-43f7-88a6-aafd04650bba","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"51bd337e-c41a-4b72-b165-b5bfa89591ca","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"33e654e1-dd28-4f67-a4da-7506f7928bb9","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"66a88562-4cbf-4977-9931-6831765a5f79","path":"sprites/spr_survivor_hotel_werfull/spr_survivor_hotel_werfull.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"4d9ecb03-fedc-4b90-a9a4-b847169dbf16","IsCreationKey":false,"Key":7.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +114,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":1024,
+  "width":128,
 }
