@@ -4,7 +4,7 @@
   "bboxMode":0,
   "bbox_bottom":242,
   "bbox_left":8,
-  "bbox_right":1015,
+  "bbox_right":119,
   "bbox_top":5,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,21 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"d9205bf0-c8b7-4f6b-b544-bdb6ab82229d","name":"d9205bf0-c8b7-4f6b-b544-bdb6ab82229d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"4f31849b-ecf3-4536-9bb5-b4077fde7196","name":"4f31849b-ecf3-4536-9bb5-b4077fde7196","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"221fe853-4aec-4e70-bc88-584a82f04fca","name":"221fe853-4aec-4e70-bc88-584a82f04fca","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"2326e0b8-ab0b-4545-83c1-458da47d5764","name":"2326e0b8-ab0b-4545-83c1-458da47d5764","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d9b6aeef-28fc-41da-a758-83262916685e","name":"d9b6aeef-28fc-41da-a758-83262916685e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"5750dcf0-817c-4357-b1ad-2f8bc89b2ea1","name":"5750dcf0-817c-4357-b1ad-2f8bc89b2ea1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e5cf62b1-28cf-4c65-9e6f-6bea9e0766ef","name":"e5cf62b1-28cf-4c65-9e6f-6bea9e0766ef","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"41746dfa-969c-41e4-a2ba-cc8ad6f8730e","name":"41746dfa-969c-41e4-a2ba-cc8ad6f8730e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"f12df510-087a-4fae-96e7-74d51ee33ced","name":"f12df510-087a-4fae-96e7-74d51ee33ced","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":256,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"d01cc715-856e-41fd-b037-b1b66ecb4402","blendMode":0,"displayName":"default","isLocked":false,"name":"d01cc715-856e-41fd-b037-b1b66ecb4402","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"2d90d469-726f-47d3-88a3-aa1a1c314bc7","blendMode":0,"displayName":"default","isLocked":false,"name":"2d90d469-726f-47d3-88a3-aa1a1c314bc7","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_Survivror_hotel_Vacancy",
   "nineSlice":null,
@@ -49,7 +56,7 @@
     },
     "eventStubScript":null,
     "eventToFunction":{},
-    "length":1.0,
+    "length":8.0,
     "lockOrigin":false,
     "moments":{
       "$KeyframeStore<MomentsEventKeyframe>":"",
@@ -69,8 +76,29 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d9205bf0-c8b7-4f6b-b544-bdb6ab82229d","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"f39b4454-f832-4481-a604-0f5704840ee3","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"4f31849b-ecf3-4536-9bb5-b4077fde7196","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"2479002c-f054-4de4-b288-435d27ade345","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"221fe853-4aec-4e70-bc88-584a82f04fca","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"53aaef6d-b886-4f6c-b273-a152149c9fe3","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"2326e0b8-ab0b-4545-83c1-458da47d5764","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"026f9089-a9d3-485b-ae34-eb4490765be6","IsCreationKey":false,"Key":2.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d9b6aeef-28fc-41da-a758-83262916685e","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"4456fa39-f41d-46e2-84e7-16db9b0303d0","IsCreationKey":false,"Key":3.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"5750dcf0-817c-4357-b1ad-2f8bc89b2ea1","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"12a6b07f-522b-4ce0-86aa-dbf2192da923","IsCreationKey":false,"Key":4.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"e5cf62b1-28cf-4c65-9e6f-6bea9e0766ef","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"681f5e9c-dad6-4589-928b-6eb07daeabf6","IsCreationKey":false,"Key":5.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"41746dfa-969c-41e4-a2ba-cc8ad6f8730e","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"590bcf0d-2bf2-4083-be66-33b14656fa30","IsCreationKey":false,"Key":6.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"f12df510-087a-4fae-96e7-74d51ee33ced","path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"0e67fb19-f0da-4506-b47f-481429cd5085","IsCreationKey":false,"Key":7.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +114,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":1024,
+  "width":128,
 }
