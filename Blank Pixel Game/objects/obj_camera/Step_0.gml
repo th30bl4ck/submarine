@@ -9,7 +9,4 @@ if (variable_global_exists("combat_active") && global.combat_active) {
 target_x = clamp(target_x, 0, room_width - 680);
 target_y = clamp(target_y, 0, room_height - 480);
 
-var cur_x = camera_get_view_x(cam);
-var cur_y = camera_get_view_y(cam);
-
-camera_set_view_pos(cam, lerp(cur_x, target_x, 0.1), lerp(cur_y, target_y, 0.1));
+camera_set_view_pos(cam, target_x, target_y);
