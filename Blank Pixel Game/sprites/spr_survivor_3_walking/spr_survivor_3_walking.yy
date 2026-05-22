@@ -3,7 +3,7 @@
   "%Name":"spr_survivor_3_walking",
   "bboxMode":0,
   "bbox_bottom":51,
-  "bbox_left":20,
+  "bbox_left":10,
   "bbox_right":42,
   "bbox_top":10,
   "collisionKind":1,
