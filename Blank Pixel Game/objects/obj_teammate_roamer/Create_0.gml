@@ -1,6 +1,6 @@
 party_slot = -1;
 target_x = x;
-ground_y = 726;
+ground_y = 735;
 wait_timer = irandom_range(60, 150);
 move_speed = 1.4;
 sprite_index = spr_survivor_1_idle;

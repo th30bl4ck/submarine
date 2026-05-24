@@ -155,6 +155,45 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
     draw_set_colour(make_colour_rgb(210, 190, 150));
     draw_text(60, 78, global.combat_phase == "target_select" ? "Choose an enemy target" : "Choose an action");
 
+    draw_set_colour(make_colour_rgb(225, 215, 190));
+    draw_text(350, 54, "Timeline:");
+    var tl_side = (global.combat_phase == "enemy_wait" || global.combat_phase == "player_wait") ? "enemy" : "party";
+    var tl_party = global.combat_actor;
+    var tl_enemy = global.combat_enemy_actor;
+    var tl_drawn = 0;
+    var tl_guard = 0;
+    while (tl_drawn < 6 && tl_guard < 24) {
+        tl_guard++;
+        if (tl_side == "party") {
+            while (tl_party < array_length(global.combat_party) && global.combat_party[tl_party].hp <= 0) tl_party++;
+            if (tl_party < array_length(global.combat_party)) {
+                var tl_party_name = global.combat_party[tl_party].name;
+                if (string_length(tl_party_name) > 8) tl_party_name = string_copy(tl_party_name, 1, 8);
+                draw_set_colour(make_colour_rgb(120, 210, 255));
+                draw_text(430 + tl_drawn * 78, 54, tl_party_name);
+                tl_party++;
+                tl_drawn++;
+            } else {
+                tl_party = 0;
+            }
+            tl_side = "enemy";
+        } else {
+            while (tl_enemy < array_length(global.combat_enemies) && !instance_exists(global.combat_enemies[tl_enemy])) tl_enemy++;
+            if (tl_enemy < array_length(global.combat_enemies)) {
+                var tl_foe = global.combat_enemies[tl_enemy];
+                var tl_name = variable_instance_exists(tl_foe, "enemy_display_name") ? tl_foe.enemy_display_name : "Enemy";
+                if (string_length(tl_name) > 8) tl_name = string_copy(tl_name, 1, 8);
+                draw_set_colour(make_colour_rgb(255, 150, 120));
+                draw_text(430 + tl_drawn * 78, 54, tl_name);
+                tl_enemy++;
+                tl_drawn++;
+            } else {
+                tl_enemy = 0;
+            }
+            tl_side = "party";
+        }
+    }
+
     var combat_draw_scale = 2.15;
     var party_slots = [
         [100, 286],
@@ -163,7 +202,7 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
         [580, 248]
     ];
     var enemy_slots = [
-        [gui_w - 100, 286],
+        [gui_w - 100, 248],
         [gui_w - 260, 248],
         [gui_w - 420, 286],
         [gui_w - 580, 248]
@@ -222,6 +261,31 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
             draw_set_colour(global.combat_phase == "target_select" ? c_yellow : c_white);
             draw_text(ex - 50, ey + 120, string(ei + 1) + " " + foe_name);
         }
+    }
+
+    if (variable_global_exists("combat_float_texts")) {
+        var old_halign_fx = draw_get_halign();
+        var old_valign_fx = draw_get_valign();
+        draw_set_halign(fa_center);
+        draw_set_valign(fa_middle);
+        for (var fx_i = 0; fx_i < array_length(global.combat_float_texts); fx_i++) {
+            var fx = global.combat_float_texts[fx_i];
+            var fx_x = 0;
+            var fx_y = 0;
+            if (fx.side == "party" && fx.index < array_length(party_slots)) {
+                fx_x = party_slots[fx.index][0];
+                fx_y = party_slots[fx.index][1] - 38 + fx.yoff;
+            } else if (fx.side == "enemy" && fx.index < array_length(enemy_slots)) {
+                fx_x = enemy_slots[fx.index][0];
+                fx_y = enemy_slots[fx.index][1] - 38 + fx.yoff;
+            }
+            draw_set_alpha(clamp(fx.timer / 48, 0, 1));
+            draw_set_colour(fx.col);
+            draw_text(fx_x, fx_y, fx.text);
+        }
+        draw_set_alpha(1);
+        draw_set_halign(old_halign_fx);
+        draw_set_valign(old_valign_fx);
     }
 
     var bx = 60;
