@@ -2,6 +2,15 @@ if (!variable_global_exists("combat_active")) {
     global.combat_active = false;
 }
 
+var zone_w = 1366;
+var zone_left_ocean_min = 0;
+var zone_left_tunnel_min = zone_w;
+var zone_dome_min = zone_w * 2;
+var zone_right_tunnel_min = zone_w * 3;
+var zone_right_ocean_min = zone_w * 4;
+var zone_world_max = zone_w * 5;
+var player_in_safe_dome = (room == room_dome && x >= zone_dome_min && x < zone_right_tunnel_min);
+
 if (room != room_surface) {
     with (obj_teammate_follower) instance_destroy();
 } else if (instance_exists(obj_teammate_follower)) {
@@ -32,7 +41,7 @@ if (room != room_dome) {
             }
         }
         if (found_roamer == noone) {
-            found_roamer = instance_create_layer(360 + roam_i * 80, 736, "Instances", obj_teammate_roamer);
+            found_roamer = instance_create_layer(zone_dome_min + 360 + roam_i * 80, 736, "Instances", obj_teammate_roamer);
             found_roamer.party_slot = roam_i;
             found_roamer.target_x = found_roamer.x;
             found_roamer.wait_timer = irandom_range(30, 120);
@@ -352,7 +361,7 @@ if (global.combat_active) {
                 global.combat_enemy = noone;
                 global.combat_phase = "none";
                 image_xscale = combat_saved_xscale;
-                x = room_width * 0.5;
+                x = zone_dome_min + zone_w * 0.5;
                 y = 704;
                 room_goto(room_dome);
                 exit;
@@ -566,8 +575,8 @@ if (global.combat_active) {
 if (place_meeting(x, y, obj_enemy)) {
     var foe_touch = instance_place(x, y, obj_enemy);
     if (foe_touch != noone) {
-        global.combat_view_x = clamp(x - 220, 0, room_width - 680);
-        global.combat_view_y = clamp(y - 330, 0, room_height - 480);
+        global.combat_view_x = clamp(x - 683, 0, max(0, room_width - 1366));
+        global.combat_view_y = clamp(y - 384, 0, max(0, room_height - 768));
         global.combat_player_return_x = x;
         global.combat_player_return_y = y;
         combat_saved_xscale = image_xscale;
@@ -707,7 +716,10 @@ if (move_right)
 }
 
 var player_is_moving = (vx != 0 || vy != 0);
-var player_in_water = (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1);
+var player_in_tunnel = (room == room_dome && ((x >= zone_left_tunnel_min && x < zone_dome_min) || (x >= zone_right_tunnel_min && x < zone_right_ocean_min)));
+var player_in_ocean = (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1)
+    || (room == room_dome && (x < zone_left_tunnel_min || x >= zone_right_ocean_min));
+var player_in_water = (player_in_tunnel || player_in_ocean);
 
 if (player_is_moving)
 {
@@ -737,6 +749,22 @@ if (place_meeting(x + vx, y, obj_platform)) {
 }
 x += vx;
 
+if (room == room_ocean_floor_left_1 && x >= room_width - 14 && move_right) {
+    vx = 0;
+    vy = 0;
+    x = zone_dome_min - 62;
+    y = 704;
+    room_goto(room_dome);
+    exit;
+} else if (room == room_ocean_floor_right_1 && x <= 14 && move_left) {
+    vx = 0;
+    vy = 0;
+    x = zone_right_tunnel_min + 62;
+    y = 704;
+    room_goto(room_dome);
+    exit;
+}
+
 // Vertical collision
 on_ground = false;
 if (place_meeting(x, y + vy, obj_platform)) {
@@ -752,10 +780,10 @@ y += vy;
 x = clamp(x, 14, room_width - 14);
 
 // Oxygen logic
-if (room == room_dome) {
-    oxygen = min(100, oxygen + ox_refill);
-} else if (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1) {
+if (player_in_water) {
     oxygen -= ox_drain;
+} else {
+    oxygen = min(100, oxygen + ox_refill);
 }
     
     if (oxygen <= 0) {
@@ -767,7 +795,7 @@ if (room == room_dome) {
         obj_resource_manager.crystal  = 0;
         obj_resource_manager.obsidian = 0;
     }
-    x = room_width * 0.5;
+    x = zone_dome_min + zone_w * 0.5;
     y = 704;
     room_goto(room_dome);
 }
@@ -785,13 +813,17 @@ if (instance_exists(obj_submarine)) {
 if (interact && near_sub) {
     vx = 0;
     vy = 0;
-    if (room == room_ocean_floor_right_1) {
+    if (room == room_dome && player_in_ocean) {
+        x = 192;
+        y = 704;
+        room_goto(room_surface);
+    } else if (room == room_ocean_floor_right_1) {
         x = 192;
         y = 704;
         room_goto(room_surface);
     } else if (room == room_surface) {
-        x = 352;
+        x = zone_right_ocean_min + 352;
         y = 704;
-        room_goto(room_ocean_floor_right_1);
+        room_goto(room_dome);
     }
 }
