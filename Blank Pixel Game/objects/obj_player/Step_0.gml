@@ -147,6 +147,9 @@ if (global.combat_active) {
                     var protected_enemy = global.combat_enemies[ep];
                     if (instance_exists(protected_enemy) && variable_instance_exists(protected_enemy, "enemy_protect")) {
                         protected_enemy.enemy_protect = max(0, protected_enemy.enemy_protect - 1);
+                        if (protected_enemy.enemy_protect <= 0 && variable_instance_exists(protected_enemy, "enemy_guard_tank")) {
+                            protected_enemy.enemy_guard_tank = noone;
+                        }
                     }
                 }
                 for (var pc = 0; pc < array_length(global.combat_party); pc++) {
@@ -177,6 +180,9 @@ if (global.combat_active) {
                 var protected_enemy = global.combat_enemies[ep];
                 if (instance_exists(protected_enemy) && variable_instance_exists(protected_enemy, "enemy_protect")) {
                     protected_enemy.enemy_protect = max(0, protected_enemy.enemy_protect - 1);
+                    if (protected_enemy.enemy_protect <= 0 && variable_instance_exists(protected_enemy, "enemy_guard_tank")) {
+                        protected_enemy.enemy_guard_tank = noone;
+                    }
                 }
             }
             for (var pc = 0; pc < array_length(global.combat_party); pc++) {
@@ -254,8 +260,31 @@ if (global.combat_active) {
                             acted = true;
                         }
                     }
+                } else if (role == "tank") {
+                    var protect_choices = [];
+                    for (var tank_guard_i = 0; tank_guard_i < array_length(global.combat_enemies); tank_guard_i++) {
+                        var tank_guard_enemy = global.combat_enemies[tank_guard_i];
+                        if (instance_exists(tank_guard_enemy) && tank_guard_enemy != enemy_attacker && (!variable_instance_exists(tank_guard_enemy, "enemy_protect") || tank_guard_enemy.enemy_protect <= 0)) {
+                            protect_choices[array_length(protect_choices)] = tank_guard_enemy;
+                        }
+                    }
+
+                    if (array_length(protect_choices) > 0 && irandom(99) < 60) {
+                        var tank_guarded_enemy = protect_choices[irandom(array_length(protect_choices) - 1)];
+                        tank_guarded_enemy.enemy_protect = 2;
+                        tank_guarded_enemy.enemy_guard_tank = enemy_attacker;
+                        var tank_guarded_name = variable_instance_exists(tank_guarded_enemy, "enemy_display_name") ? tank_guarded_enemy.enemy_display_name : "Enemy";
+                        global.combat_message = enemy_name + " covers " + tank_guarded_name + ".";
+                        acted = true;
+                    } else if (irandom(99) < 30) {
+                        enemy_attacker.enemy_protect = 2;
+                        enemy_attacker.enemy_guard_tank = noone;
+                        global.combat_message = enemy_name + " locks down its guard.";
+                        acted = true;
+                    }
                 } else if (irandom(99) < 25) {
                     enemy_attacker.enemy_protect = 2;
+                    enemy_attacker.enemy_guard_tank = noone;
                     global.combat_message = enemy_name + " hardens its guard.";
                     acted = true;
                 }
@@ -268,6 +297,17 @@ if (global.combat_active) {
                     if (role == "shaman") {
                         edmg = irandom_range(5, 11);
                         move_text = choose("curses", "hexes");
+                    } else if (role == "tank") {
+                        if (move_roll < 35) {
+                            edmg = irandom_range(18, 28);
+                            move_text = "slams into";
+                        } else if (move_roll < 70) {
+                            edmg = irandom_range(12, 20);
+                            move_text = "shield-bashes";
+                        } else {
+                            edmg = irandom_range(8, 14);
+                            move_text = "body-checks";
+                        }
                     } else if (move_roll < 25) {
                         edmg = irandom_range(15, 24);
                         move_text = "crushes";
@@ -368,17 +408,31 @@ if (global.combat_active) {
             var pending_move = global.combat_moves[global.combat_pending_move];
             var chosen_foe = global.combat_enemies[selected_enemy];
             var target_damage = irandom_range(pending_move.min_value, pending_move.max_value);
-            if (variable_instance_exists(chosen_foe, "enemy_protect") && chosen_foe.enemy_protect > 0) {
+            var damage_foe = chosen_foe;
+            var damage_enemy_index = selected_enemy;
+            var protected_by_tank = false;
+            if (variable_instance_exists(chosen_foe, "enemy_guard_tank") && instance_exists(chosen_foe.enemy_guard_tank) && chosen_foe.enemy_guard_tank.hp > 0 && chosen_foe.enemy_protect > 0) {
+                damage_foe = chosen_foe.enemy_guard_tank;
+                protected_by_tank = true;
+                for (var tank_find_i = 0; tank_find_i < array_length(global.combat_enemies); tank_find_i++) {
+                    if (global.combat_enemies[tank_find_i] == damage_foe) damage_enemy_index = tank_find_i;
+                }
+            } else if (variable_instance_exists(chosen_foe, "enemy_protect") && chosen_foe.enemy_protect > 0) {
                 target_damage = ceil(target_damage * 0.5);
             }
-            chosen_foe.hp -= target_damage;
-            global.combat_float_texts[array_length(global.combat_float_texts)] = { side: "enemy", index: selected_enemy, text: "-" + string(target_damage), col: make_colour_rgb(255, 80, 70), timer: 48, yoff: 0 };
+            damage_foe.hp -= target_damage;
+            global.combat_float_texts[array_length(global.combat_float_texts)] = { side: "enemy", index: damage_enemy_index, text: "-" + string(target_damage), col: make_colour_rgb(255, 80, 70), timer: 48, yoff: 0 };
             pending_actor.cooldowns[global.combat_pending_move] = pending_move.cooldown;
             global.combat_lunge_side = "party";
             global.combat_lunge_index = global.combat_actor;
             global.combat_lunge_timer = 18;
             var chosen_name = variable_instance_exists(chosen_foe, "enemy_display_name") ? chosen_foe.enemy_display_name : "Enemy";
-            global.combat_message = pending_actor.name + " hits " + chosen_name + " with " + pending_move.name + " for " + string(target_damage) + ".";
+            if (protected_by_tank) {
+                var tank_name = variable_instance_exists(damage_foe, "enemy_display_name") ? damage_foe.enemy_display_name : "Tank";
+                global.combat_message = tank_name + " blocks for " + chosen_name + " and takes " + string(target_damage) + ".";
+            } else {
+                global.combat_message = pending_actor.name + " hits " + chosen_name + " with " + pending_move.name + " for " + string(target_damage) + ".";
+            }
             global.combat_pending_move = -1;
 
             var targeted_enemies_alive = false;
@@ -539,6 +593,7 @@ if (place_meeting(x, y, obj_enemy)) {
                 setup_enemy.combat_return_y = setup_enemy.y;
                 setup_enemy.combat_saved_xscale = setup_enemy.image_xscale;
                 setup_enemy.enemy_protect = 0;
+                setup_enemy.enemy_guard_tank = noone;
                 setup_enemy.image_index = 0;
             }
         }

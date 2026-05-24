@@ -32,8 +32,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_mineral_obsidian",
-    "path":"sprites/spr_mineral_obsidian/spr_mineral_obsidian.yy",
+    "name":"spr_Survivror_hotel_Vacancy",
+    "path":"sprites/spr_Survivror_hotel_Vacancy/spr_Survivror_hotel_Vacancy.yy",
   },
   "spriteMaskId":null,
   "visible":true,
