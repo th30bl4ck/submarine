@@ -17,7 +17,7 @@ if (object_index == obj_shaman) {
     max_hp = 135;
 } else {
     enemy_display_name = enemy_names[irandom(array_length(enemy_names) - 1)];
-    sprite_index = choose(spr_enemy_3, spr_enemy_2);
+    sprite_index = choose(spr_enemy_3, spr_enemy_2, spr_enemy_1);
     max_hp = 60;
 }
 

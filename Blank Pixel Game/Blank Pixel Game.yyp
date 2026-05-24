@@ -72,6 +72,7 @@
     {"id":{"name":"obj_teammate_roamer","path":"objects/obj_teammate_roamer/obj_teammate_roamer.yy",},},
     {"id":{"name":"obj_teammates","path":"objects/obj_teammates/obj_teammates.yy",},},
     {"id":{"name":"obj_upgrade_station","path":"objects/obj_upgrade_station/obj_upgrade_station.yy",},},
+    {"id":{"name":"obj_zone_backdrop","path":"objects/obj_zone_backdrop/obj_zone_backdrop.yy",},},
     {"id":{"name":"room_dome","path":"rooms/room_dome/room_dome.yy",},},
     {"id":{"name":"room_ocean_floor_left_1","path":"rooms/room_ocean_floor_left_1/room_ocean_floor_left_1.yy",},},
     {"id":{"name":"room_ocean_floor_right_1","path":"rooms/room_ocean_floor_right_1/room_ocean_floor_right_1.yy",},},
