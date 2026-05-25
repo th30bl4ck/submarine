@@ -8,8 +8,8 @@
   "name":"obj_game_manager",
   "overriddenProperties":[],
   "parent":{
-    "name":"hidden_objects",
-    "path":"folders/Objects/hidden_objects.yy",
+    "name":"Objects",
+    "path":"folders/Objects.yy",
   },
   "parentObjectId":null,
   "persistent":true,

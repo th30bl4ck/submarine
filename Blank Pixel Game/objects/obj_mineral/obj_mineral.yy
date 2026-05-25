@@ -11,8 +11,8 @@
   "name":"obj_mineral",
   "overriddenProperties":[],
   "parent":{
-    "name":"loot_objects",
-    "path":"folders/Objects/loot_objects.yy",
+    "name":"Objects",
+    "path":"folders/Objects.yy",
   },
   "parentObjectId":null,
   "persistent":false,
