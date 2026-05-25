@@ -10,8 +10,8 @@
   "name":"obj_teammates",
   "overriddenProperties":[],
   "parent":{
-    "name":"teammate_objects",
-    "path":"folders/Objects/teammate_objects.yy",
+    "name":"Objects",
+    "path":"folders/Objects.yy",
   },
   "parentObjectId":null,
   "persistent":false,

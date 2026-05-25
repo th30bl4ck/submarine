@@ -6,8 +6,8 @@
   "name":"obj_shaman",
   "overriddenProperties":[],
   "parent":{
-    "name":"enemy_objects",
-    "path":"folders/Objects/enemy_objects.yy",
+    "name":"Objects",
+    "path":"folders/Objects.yy",
   },
   "parentObjectId":{
     "name":"obj_enemy",
