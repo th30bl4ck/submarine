@@ -94,6 +94,7 @@
     {"id":{"name":"spr_player_land_walk","path":"sprites/spr_player_land_walk/spr_player_land_walk.yy",},},
     {"id":{"name":"spr_player_water_idle","path":"sprites/spr_player_water_idle/spr_player_water_idle.yy",},},
     {"id":{"name":"spr_player_water_walk","path":"sprites/spr_player_water_walk/spr_player_water_walk.yy",},},
+    {"id":{"name":"spr_safe","path":"sprites/spr_safe/spr_safe.yy",},},
     {"id":{"name":"spr_shamen","path":"sprites/spr_shamen/spr_shamen.yy",},},
     {"id":{"name":"spr_survivor_1_idle","path":"sprites/spr_survivor_1_idle/spr_survivor_1_idle.yy",},},
     {"id":{"name":"spr_survivor_1_walking","path":"sprites/spr_survivor_1_walking/spr_survivor_1_walking.yy",},},
