@@ -9,7 +9,7 @@ var zone_dome_min = zone_w * 2;
 var zone_right_tunnel_min = zone_w * 3;
 var zone_right_ocean_min = zone_w * 4;
 var zone_world_max = zone_w * 5;
-var player_in_safe_dome = (room == room_dome && x >= zone_dome_min && x < zone_right_tunnel_min);
+var player_in_safe_dome = (room == room_dome && x >= zone_left_tunnel_min && x < zone_right_ocean_min);
 
 if (room != room_surface) {
     with (obj_teammate_follower) instance_destroy();
@@ -719,7 +719,7 @@ var player_is_moving = (vx != 0 || vy != 0);
 var player_in_tunnel = (room == room_dome && ((x >= zone_left_tunnel_min && x < zone_dome_min) || (x >= zone_right_tunnel_min && x < zone_right_ocean_min)));
 var player_in_ocean = (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1)
     || (room == room_dome && (x < zone_left_tunnel_min || x >= zone_right_ocean_min));
-var player_in_water = (player_in_tunnel || player_in_ocean);
+var player_in_water = player_in_ocean;
 
 if (player_is_moving)
 {
