@@ -75,6 +75,8 @@
     {"id":{"name":"spr_background_dome_4","path":"sprites/spr_background_dome_4/spr_background_dome_4.yy",},},
     {"id":{"name":"spr_background_tunnel","path":"sprites/spr_background_tunnel/spr_background_tunnel.yy",},},
     {"id":{"name":"spr_background_underwater","path":"sprites/spr_background_underwater/spr_background_underwater.yy",},},
+    {"id":{"name":"spr_chest_closed","path":"sprites/spr_chest_closed/spr_chest_closed.yy",},},
+    {"id":{"name":"spr_chest_open","path":"sprites/spr_chest_open/spr_chest_open.yy",},},
     {"id":{"name":"spr_dome","path":"sprites/spr_dome/spr_dome.yy",},},
     {"id":{"name":"spr_door","path":"sprites/spr_door/spr_door.yy",},},
     {"id":{"name":"spr_enemy_1","path":"sprites/spr_enemy_1/spr_enemy_1.yy",},},
