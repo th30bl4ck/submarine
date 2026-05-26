@@ -85,6 +85,7 @@
     {"id":{"name":"spr_enemy_3","path":"sprites/spr_enemy_3/spr_enemy_3.yy",},},
     {"id":{"name":"spr_gate_closed","path":"sprites/spr_gate_closed/spr_gate_closed.yy",},},
     {"id":{"name":"spr_gate_open","path":"sprites/spr_gate_open/spr_gate_open.yy",},},
+    {"id":{"name":"spr_key","path":"sprites/spr_key/spr_key.yy",},},
     {"id":{"name":"spr_mineral_crystal","path":"sprites/spr_mineral_crystal/spr_mineral_crystal.yy",},},
     {"id":{"name":"spr_mineral_iron","path":"sprites/spr_mineral_iron/spr_mineral_iron.yy",},},
     {"id":{"name":"spr_mineral_obsidian","path":"sprites/spr_mineral_obsidian/spr_mineral_obsidian.yy",},},
