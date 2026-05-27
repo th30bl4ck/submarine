@@ -73,6 +73,7 @@
     {"id":{"name":"spr_background_dome_2","path":"sprites/spr_background_dome_2/spr_background_dome_2.yy",},},
     {"id":{"name":"spr_background_dome_3","path":"sprites/spr_background_dome_3/spr_background_dome_3.yy",},},
     {"id":{"name":"spr_background_dome_4","path":"sprites/spr_background_dome_4/spr_background_dome_4.yy",},},
+    {"id":{"name":"spr_background_land","path":"sprites/spr_background_land/spr_background_land.yy",},},
     {"id":{"name":"spr_background_tunnel","path":"sprites/spr_background_tunnel/spr_background_tunnel.yy",},},
     {"id":{"name":"spr_background_underwater","path":"sprites/spr_background_underwater/spr_background_underwater.yy",},},
     {"id":{"name":"spr_chest_closed","path":"sprites/spr_chest_closed/spr_chest_closed.yy",},},
