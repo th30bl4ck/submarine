@@ -1,5 +1,14 @@
 var view_w = 1366;
 var view_h = 768;
+
+if (!instance_exists(obj_player)) {
+    var spawn_x = (room == room_surface) ? room_width * 0.5 + 80 : 3724;
+    var spawn_y = (room == room_surface) ? 704 : 722;
+    instance_create_layer(spawn_x, spawn_y, "Instances", obj_player);
+}
+
+if (!instance_exists(obj_player)) exit;
+
 var target_x = obj_player.x - view_w * 0.5;
 var target_y = obj_player.y - view_h * 0.5;
 

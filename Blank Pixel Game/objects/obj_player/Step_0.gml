@@ -303,7 +303,18 @@ if (global.combat_active) {
                     var edmg = irandom_range(8, 16);
                     var move_text = "attacks";
 
-                    if (role == "shaman") {
+                    if (role == "boss") {
+                        if (move_roll < 35) {
+                            edmg = irandom_range(26, 38);
+                            move_text = "crushes";
+                        } else if (move_roll < 70) {
+                            edmg = irandom_range(18, 28);
+                            move_text = "rakes";
+                        } else {
+                            edmg = irandom_range(14, 22);
+                            move_text = "surges into";
+                        }
+                    } else if (role == "shaman") {
                         edmg = irandom_range(5, 11);
                         move_text = choose("curses", "hexes");
                     } else if (role == "tank") {
@@ -327,6 +338,9 @@ if (global.combat_active) {
                         move_text = choose("swipes at", "bites");
                     }
 
+                    if (variable_instance_exists(enemy_attacker, "enemy_damage_bonus")) {
+                        edmg += enemy_attacker.enemy_damage_bonus;
+                    }
                     if (global.combat_party[target_index].guard) edmg = ceil(edmg * 0.4);
                     global.combat_party[target_index].hp -= edmg;
                     global.combat_float_texts[array_length(global.combat_float_texts)] = { side: "party", index: target_index, text: "-" + string(edmg), col: make_colour_rgb(255, 80, 70), timer: 48, yoff: 0 };
@@ -805,7 +819,7 @@ if (player_in_water) {
 var near_sub = false;
 if (instance_exists(obj_submarine)) {
     var dist = point_distance(x, y, obj_submarine.x, obj_submarine.y);
-    if (dist < 60) {
+    if (dist < 120) {
         near_sub = true;
     }
 }
@@ -814,11 +828,11 @@ if (interact && near_sub) {
     vx = 0;
     vy = 0;
     if (room == room_dome && player_in_ocean) {
-        x = 192;
+        x = 8276;
         y = 704;
         room_goto(room_surface);
     } else if (room == room_ocean_floor_right_1) {
-        x = 192;
+        x = 8276;
         y = 704;
         room_goto(room_surface);
     } else if (room == room_surface) {
