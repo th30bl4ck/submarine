@@ -1,4 +1,5 @@
 globalvar WATER_Y, player_spawn_x, player_spawn_y;
+randomize();
 WATER_Y = 800;
 player_spawn_x = 200;
 player_spawn_y = 2300;
@@ -27,6 +28,12 @@ if (!variable_global_exists("teammates_found")) {
 }
 if (!variable_global_exists("teammate_collected_keys")) {
     global.teammate_collected_keys = [];
+}
+if (!variable_global_exists("teammate_sprite_assignments")) {
+    global.teammate_sprite_assignments = [];
+}
+if (!variable_global_exists("teammate_used_sprite_numbers")) {
+    global.teammate_used_sprite_numbers = [];
 }
 if (!variable_global_exists("teammate_menu_open")) {
     global.teammate_menu_open = false;

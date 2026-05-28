@@ -6,12 +6,9 @@ var player_in_single_room_dome = (room == room_dome && obj_player.x >= zone_w * 
 var player_in_single_room_tunnel = (room == room_dome && ((obj_player.x >= zone_w && obj_player.x < zone_w * 2) || (obj_player.x >= zone_w * 3 && obj_player.x < zone_w * 4)));
 var player_in_single_room_ocean = (room == room_dome && (obj_player.x < zone_w || obj_player.x >= zone_w * 4));
 
-if (room == room_dome && player_in_single_room_dome) {
+if (room == room_dome && (player_in_single_room_dome || player_in_single_room_tunnel)) {
     draw_set_colour(c_aqua);
     draw_text(10, 10, "DOME - Safe");
-} else if (player_in_single_room_tunnel) {
-    draw_set_colour(make_colour_rgb(255, 170, 30));
-    draw_text(10, 10, "TUNNEL - Oxygen depleting");
 } else if (room == room_ocean_floor_left_1 || room == room_ocean_floor_right_1 || player_in_single_room_ocean) {
     draw_set_colour(make_colour_rgb(255, 170, 30));
     draw_text(10, 10, "OCEAN FLOOR - Oxygen depleting");
