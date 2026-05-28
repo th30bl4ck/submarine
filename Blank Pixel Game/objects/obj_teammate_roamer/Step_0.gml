@@ -25,7 +25,7 @@ if (wait_timer > 0) {
 if (abs(target_x - x) <= move_speed) {
     x = target_x;
     wait_timer = irandom_range(90, 210);
-    target_x = irandom_range(180, room_width - 180);
+    target_x = irandom_range(1366 * 2 + 180, 1366 * 3 - 180);
     sprite_index = idle_sprite;
     image_index = 0;
     image_speed = 0;
