@@ -1,5 +1,9 @@
 show_prompt = false;
 
+if ((variable_global_exists("tutorial_popup_active") && global.tutorial_popup_active) || (variable_global_exists("tutorial_popup_block_input") && global.tutorial_popup_block_input > 0)) {
+    exit;
+}
+
 if (opened) {
     if (object_index == obj_loot_safe && image_index >= image_number - 1) {
         image_index = image_number - 1;
@@ -24,6 +28,12 @@ if (point_distance(x, y, obj_player.x, obj_player.y) < interact_range) {
 
         global.surface_looted_caches[array_length(global.surface_looted_caches)] = loot_key;
         global.combat_message = "Found +" + string(loot_iron) + " iron, +" + string(loot_crystal) + " crystal, +" + string(loot_obsidian) + " obsidian.";
+        if (!variable_global_exists("tutorial_seen_loot") || !global.tutorial_seen_loot) {
+            global.tutorial_seen_loot = true;
+            global.tutorial_popup_active = true;
+            global.tutorial_popup_title = "LOOTING";
+            global.tutorial_popup_body = "Loot caches give you the materials needed for upgrades.\n\nIron, crystal, and obsidian appear in your resource panel. Bring those materials back to the upgrade shop to expand the dome and push farther out.";
+        }
         opened = true;
         show_prompt = false;
         if (object_index == obj_loot_safe) {

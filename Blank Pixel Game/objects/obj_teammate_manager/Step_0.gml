@@ -2,6 +2,10 @@ if (!variable_global_exists("teammate_manager_near")) {
     global.teammate_manager_near = false;
 }
 
+if ((variable_global_exists("tutorial_popup_active") && global.tutorial_popup_active) || (variable_global_exists("tutorial_popup_block_input") && global.tutorial_popup_block_input > 0)) {
+    exit;
+}
+
 var near_player = instance_exists(obj_player) && point_distance(x, y, obj_player.x, obj_player.y) < 96;
 if (near_player) {
     global.teammate_manager_near = true;
@@ -9,6 +13,12 @@ if (near_player) {
 
 if (near_player && keyboard_check_pressed(ord("E")) && !global.combat_active) {
     global.teammate_menu_open = !global.teammate_menu_open;
+    if (!variable_global_exists("tutorial_seen_hotel") || !global.tutorial_seen_hotel) {
+        global.tutorial_seen_hotel = true;
+        global.tutorial_popup_active = true;
+        global.tutorial_popup_title = "SURVIVOR HOTEL";
+        global.tutorial_popup_body = "The hotel stores rescued survivors back at the dome.\n\nOpen it whenever you want to manage your crew. Survivors in storage are safe, and equipped survivors can travel with you on the surface.";
+    }
 }
 
 if (global.teammate_menu_open) {

@@ -44,13 +44,36 @@ if (!variable_global_exists("teammate_manager_near")) {
 if (!variable_global_exists("teammate_recruit_near")) {
     global.teammate_recruit_near = false;
 }
+if (!variable_global_exists("tutorial_popup_active")) {
+    global.tutorial_popup_active = false;
+    global.tutorial_popup_title = "";
+    global.tutorial_popup_body = "";
+}
+if (!variable_global_exists("tutorial_popup_block_input")) {
+    global.tutorial_popup_block_input = 0;
+}
+if (!variable_global_exists("tutorial_seen_hotel")) {
+    global.tutorial_seen_hotel = false;
+}
+if (!variable_global_exists("tutorial_seen_upgrade_shop")) {
+    global.tutorial_seen_upgrade_shop = false;
+}
+if (!variable_global_exists("tutorial_seen_survivor_equip")) {
+    global.tutorial_seen_survivor_equip = false;
+}
+if (!variable_global_exists("tutorial_seen_loot")) {
+    global.tutorial_seen_loot = false;
+}
+if (!variable_global_exists("tutorial_seen_combat")) {
+    global.tutorial_seen_combat = false;
+}
 global.combat_moves = [
     {
         name: "Harpoon Strike",
         desc: "Reliable damage",
         kind: "damage",
-        min_value: 11,
-        max_value: 19,
+        min_value: 1100,
+        max_value: 1900,
         cooldown: 0
     },
     {

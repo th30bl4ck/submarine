@@ -2,6 +2,23 @@ if (!variable_global_exists("combat_active")) {
     global.combat_active = false;
 }
 
+if (variable_global_exists("tutorial_popup_active") && global.tutorial_popup_active) {
+    vx = 0;
+    vy = 0;
+    if (keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_escape)) {
+        global.tutorial_popup_active = false;
+        global.tutorial_popup_block_input = 2;
+    }
+    exit;
+}
+
+if (variable_global_exists("tutorial_popup_block_input") && global.tutorial_popup_block_input > 0) {
+    global.tutorial_popup_block_input--;
+    vx = 0;
+    vy = 0;
+    exit;
+}
+
 var zone_w = 1366;
 var zone_left_ocean_min = 0;
 var zone_left_tunnel_min = zone_w;
@@ -411,7 +428,19 @@ if (global.combat_active) {
             var tmx = device_mouse_x_to_gui(0);
             var tmy = device_mouse_y_to_gui(0);
             var tgw = display_get_gui_width();
-            var enemy_gui_slots = [
+            var click_boss_battle = false;
+            for (var click_boss_i = 0; click_boss_i < array_length(global.combat_enemies); click_boss_i++) {
+                var click_boss = global.combat_enemies[click_boss_i];
+                if (instance_exists(click_boss) && variable_instance_exists(click_boss, "enemy_role") && click_boss.enemy_role == "boss") {
+                    click_boss_battle = true;
+                }
+            }
+            var enemy_gui_slots = click_boss_battle ? [
+                [tgw - 270, 258],
+                [tgw - 440, 292],
+                [tgw - 610, 292],
+                [tgw - 780, 292]
+            ] : [
                 [tgw - 100, 248],
                 [tgw - 260, 248],
                 [tgw - 420, 286],
@@ -596,7 +625,7 @@ if (place_meeting(x, y, obj_enemy)) {
         combat_saved_xscale = image_xscale;
 
         var max_combat_enemies = 4;
-        var combat_join_distance = 360;
+        var combat_join_distance = 430;
         global.combat_enemies = [];
         global.combat_enemies[0] = foe_touch;
         var enemy_count = 1;
@@ -700,6 +729,12 @@ if (place_meeting(x, y, obj_enemy)) {
         global.combat_message = "An enemy team blocks the path.";
         global.combat_guard = false;
         global.combat_selected_move = 0;
+        if (!variable_global_exists("tutorial_seen_combat") || !global.tutorial_seen_combat) {
+            global.tutorial_seen_combat = true;
+            global.tutorial_popup_active = true;
+            global.tutorial_popup_title = "COMBAT";
+            global.tutorial_popup_body = "Combat is turn based.\n\nPress 1-4 or click a move, then choose an enemy target when asked. Brace reduces incoming damage, Repair Suit heals the weakest ally, and equipped survivors take turns beside you.";
+        }
         exit;
     }
 }

@@ -31,7 +31,10 @@ function surface_key(_x, _level) {
 }
 
 function surface_gate(_x, _level, _dir) {
-    var inst = surface_make(obj_surface_gate, _x, 626, 2 * _dir, 2.6);
+    var gate_scale = 2.6;
+    var gate_bottom_y = floor_y + 8;
+    var gate_y = gate_bottom_y - (115 - 84) * gate_scale;
+    var inst = surface_make(obj_surface_gate, _x, gate_y, 2 * _dir, gate_scale);
     if (instance_exists(inst)) {
         inst.required_key = _level;
     }
@@ -54,44 +57,81 @@ function surface_cache(_obj, _x) {
     return surface_make(_obj, _x, ground_y, _obj == obj_loot_safe ? 1.5 : 1.4, _obj == obj_loot_safe ? 1.5 : 1.4);
 }
 
-for (var side = -1; side <= 1; side += 2) {
-    var dir = side;
-    var gate_face = (dir < 0) ? 1 : -1;
+var left_gate_face = 1;
+surface_cache(obj_loot_chest, center_x - 520);
+surface_make(obj_teammates, center_x - 780, ground_y, 2, 1.5);
+surface_key(center_x - 1080, 1);
+surface_enemy(obj_enemy, center_x - 1350, 1.45);
+surface_enemy(obj_shaman, center_x - 1460, 1.3);
+surface_cache(obj_loot_safe, center_x - 1700);
+surface_gate(center_x - 2050, 1, left_gate_face);
 
-    surface_make(obj_teammates, center_x + dir * 520, ground_y, 2, 1.5);
-    surface_cache(obj_loot_chest, center_x + dir * 760);
-    surface_enemy(obj_enemy, center_x + dir * 1020, 1.5);
-    surface_make(obj_teammates, center_x + dir * 1240, ground_y, 2, 1.5);
-    surface_key(center_x + dir * 1500, 1);
-    surface_cache(obj_loot_safe, center_x + dir * 1740);
-    surface_gate(center_x + dir * 2100, 1, gate_face);
+surface_enemy(obj_tank, center_x - 2380, 1.85);
+surface_enemy(obj_enemy, center_x - 2490, 1.5);
+surface_enemy(obj_enemy, center_x - 2600, 1.5);
+surface_cache(obj_loot_chest, center_x - 2860);
+surface_make(obj_teammates, center_x - 3120, ground_y, 2, 1.5);
+surface_key(center_x - 3380, 2);
+surface_enemy(obj_enemy, center_x - 3740, 1.55);
+surface_enemy(obj_shaman, center_x - 3850, 1.35);
+surface_gate(center_x - 4200, 2, left_gate_face);
 
-    surface_enemy(obj_enemy, center_x + dir * 2460, 1.6);
-    surface_enemy(obj_shaman, center_x + dir * 2600, 1.4);
-    surface_make(obj_teammates, center_x + dir * 2860, ground_y, 2, 1.5);
-    surface_cache(obj_loot_chest, center_x + dir * 3100);
-    surface_enemy(obj_tank, center_x + dir * 3380, 2.0);
-    surface_enemy(obj_enemy, center_x + dir * 3520, 1.7);
-    surface_cache(obj_loot_safe, center_x + dir * 3740);
-    surface_key(center_x + dir * 3980, 2);
-    surface_gate(center_x + dir * 4320, 2, gate_face);
+surface_cache(obj_loot_safe, center_x - 4520);
+surface_enemy(obj_enemy, center_x - 4860, 1.6);
+surface_enemy(obj_enemy, center_x - 4970, 1.6);
+surface_enemy(obj_tank, center_x - 5080, 1.95);
+surface_key(center_x - 5360, 3);
+surface_make(obj_teammates, center_x - 5680, ground_y, 2, 1.5);
+surface_enemy(obj_shaman, center_x - 6000, 1.4);
+surface_enemy(obj_enemy, center_x - 6110, 1.65);
+surface_enemy(obj_tank, center_x - 6220, 2.0);
+surface_gate(center_x - 6650, 3, left_gate_face);
+surface_cache(obj_loot_safe, center_x - 7060);
+surface_enemy(obj_enemy, center_x - 7360, 1.7);
+surface_enemy(obj_enemy, center_x - 7480, 1.7);
 
-    surface_make(obj_teammates, center_x + dir * 4680, ground_y, 2, 1.5);
-    surface_enemy(obj_enemy, center_x + dir * 4940, 1.8);
-    surface_enemy(obj_shaman, center_x + dir * 5100, 1.5);
-    surface_cache(obj_loot_chest, center_x + dir * 5380);
-    surface_enemy(obj_tank, center_x + dir * 5620, 2.1);
-    surface_cache(obj_loot_safe, center_x + dir * 5860);
-    surface_make(obj_teammates, center_x + dir * 6040, ground_y, 2, 1.5);
-    surface_key(center_x + dir * 6220, 3);
-    surface_gate(center_x + dir * 6500, 3, gate_face);
+var right_gate_face = -1;
+surface_make(obj_teammates, center_x + 520, ground_y, 2, 1.5);
+surface_cache(obj_loot_chest, center_x + 760);
+surface_key(center_x + 960, 1);
+surface_enemy(obj_enemy, center_x + 1160, 1.45);
+surface_enemy(obj_enemy, center_x + 1270, 1.45);
+surface_make(obj_teammates, center_x + 1460, ground_y, 2, 1.5);
+surface_cache(obj_loot_safe, center_x + 1740);
+surface_gate(center_x + 2200, 1, right_gate_face);
 
-    surface_enemy(obj_enemy, center_x + dir * 6840, 1.9);
-    surface_enemy(obj_tank, center_x + dir * 7040, 2.2);
-    surface_cache(obj_loot_safe, center_x + dir * 7280);
-    surface_make(obj_teammates, center_x + dir * 7460, ground_y, 2, 1.5);
-    var boss_inst = surface_make(obj_surface_boss, center_x + dir * 7760, 638, 2.4, 2.4);
-    if (instance_exists(boss_inst)) {
-        boss_inst.image_xscale = (boss_inst.x < center_x) ? -2.4 : 2.4;
-    }
+surface_enemy(obj_enemy, center_x + 2520, 1.55);
+surface_enemy(obj_shaman, center_x + 2630, 1.35);
+surface_enemy(obj_enemy, center_x + 2740, 1.55);
+surface_make(obj_teammates, center_x + 2940, ground_y, 2, 1.5);
+surface_key(center_x + 3120, 2);
+surface_cache(obj_loot_chest, center_x + 3260);
+surface_enemy(obj_tank, center_x + 3520, 1.9);
+surface_enemy(obj_enemy, center_x + 3630, 1.55);
+surface_enemy(obj_enemy, center_x + 3740, 1.55);
+surface_cache(obj_loot_safe, center_x + 3920);
+surface_gate(center_x + 4400, 2, right_gate_face);
+
+surface_make(obj_teammates, center_x + 4680, ground_y, 2, 1.5);
+surface_enemy(obj_enemy, center_x + 4980, 1.6);
+surface_enemy(obj_shaman, center_x + 5090, 1.4);
+surface_enemy(obj_enemy, center_x + 5200, 1.6);
+surface_enemy(obj_tank, center_x + 5310, 1.95);
+surface_cache(obj_loot_chest, center_x + 5480);
+surface_key(center_x + 5580, 3);
+surface_enemy(obj_enemy, center_x + 5840, 1.65);
+surface_enemy(obj_tank, center_x + 5950, 2.0);
+surface_enemy(obj_shaman, center_x + 6060, 1.45);
+surface_cache(obj_loot_safe, center_x + 6250);
+surface_make(obj_teammates, center_x + 6380, ground_y, 2, 1.5);
+surface_gate(center_x + 6500, 3, right_gate_face);
+
+surface_enemy(obj_enemy, center_x + 6840, 1.7);
+surface_enemy(obj_tank, center_x + 6960, 2.0);
+surface_enemy(obj_enemy, center_x + 7080, 1.7);
+surface_cache(obj_loot_safe, center_x + 7280);
+surface_make(obj_teammates, center_x + 7460, ground_y, 2, 1.5);
+var boss_inst = surface_make(obj_surface_boss, center_x + 7760, ground_y - (128 - 64) * 2.4, 2.4, 2.4);
+if (instance_exists(boss_inst)) {
+    boss_inst.image_xscale = 2.4;
 }

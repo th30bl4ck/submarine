@@ -1,5 +1,9 @@
 var dist = point_distance(x, y, obj_player.x, obj_player.y);
 
+if ((variable_global_exists("tutorial_popup_active") && global.tutorial_popup_active) || (variable_global_exists("tutorial_popup_block_input") && global.tutorial_popup_block_input > 0)) {
+    exit;
+}
+
 if (!instance_exists(obj_resource_manager)) {
     instance_create_depth(0, 0, 0, obj_resource_manager);
 }
@@ -9,6 +13,12 @@ if (dist < interact_range) {
 
     if (keyboard_check_pressed(ord("E")) && !obj_player.near_submarine) {
         show_menu = !show_menu; 
+        if (!variable_global_exists("tutorial_seen_upgrade_shop") || !global.tutorial_seen_upgrade_shop) {
+            global.tutorial_seen_upgrade_shop = true;
+            global.tutorial_popup_active = true;
+            global.tutorial_popup_title = "UPGRADE SHOP";
+            global.tutorial_popup_body = "Spend iron, crystal, and obsidian here to improve the dome.\n\nEach upgrade makes the safe area bigger. Loot the surface and ocean floor for materials, then return here and press U when you can afford the next level.";
+        }
     }
 
     if (show_menu) {

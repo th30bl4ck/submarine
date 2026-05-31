@@ -144,21 +144,45 @@ if (!variable_global_exists("combat_active") || !global.combat_active) {
 if (variable_global_exists("combat_active") && global.combat_active && array_length(global.combat_party) > 0) {
     var gui_w = display_get_gui_width();
     var gui_h = display_get_gui_height();
+    var boss_battle = false;
+    var boss_inst = noone;
+    for (var boss_check = 0; boss_check < array_length(global.combat_enemies); boss_check++) {
+        var boss_candidate = global.combat_enemies[boss_check];
+        if (instance_exists(boss_candidate) && variable_instance_exists(boss_candidate, "enemy_role") && boss_candidate.enemy_role == "boss") {
+            boss_battle = true;
+            boss_inst = boss_candidate;
+        }
+    }
 
     draw_set_alpha(0.78);
     draw_set_colour(make_colour_rgb(8, 8, 12));
     draw_rectangle(0, 0, gui_w, gui_h, false);
     draw_set_alpha(1);
 
-    draw_set_colour(make_colour_rgb(25, 23, 25));
+    draw_set_colour(boss_battle ? make_colour_rgb(28, 18, 18) : make_colour_rgb(25, 23, 25));
     draw_rectangle(36, 34, gui_w - 36, gui_h - 30, false);
-    draw_set_colour(make_colour_rgb(150, 130, 100));
+    draw_set_colour(boss_battle ? make_colour_rgb(205, 88, 62) : make_colour_rgb(150, 130, 100));
     draw_rectangle(36, 34, gui_w - 36, gui_h - 30, true);
 
     draw_set_colour(c_white);
-    draw_text(60, 54, "TURN-BASED COMBAT");
-    draw_set_colour(make_colour_rgb(210, 190, 150));
+    draw_text(60, 54, boss_battle ? "BOSS FIGHT" : "TURN-BASED COMBAT");
+    draw_set_colour(boss_battle ? make_colour_rgb(255, 180, 145) : make_colour_rgb(210, 190, 150));
     draw_text(60, 78, global.combat_phase == "target_select" ? "Choose an enemy target" : "Choose an action");
+
+    if (boss_battle && instance_exists(boss_inst)) {
+        var boss_hp_pct = max(0, boss_inst.hp) / boss_inst.max_hp;
+        var boss_name = variable_instance_exists(boss_inst, "enemy_display_name") ? boss_inst.enemy_display_name : "Boss";
+        draw_set_halign(fa_center);
+        draw_set_colour(make_colour_rgb(255, 215, 190));
+        draw_text(gui_w * 0.5, 88, boss_name);
+        draw_set_halign(fa_left);
+        draw_set_colour(make_colour_rgb(38, 14, 14));
+        draw_rectangle(gui_w * 0.5 - 260, 112, gui_w * 0.5 + 260, 128, false);
+        draw_set_colour(make_colour_rgb(205, 48, 42));
+        draw_rectangle(gui_w * 0.5 - 260, 112, gui_w * 0.5 - 260 + floor(520 * boss_hp_pct), 128, false);
+        draw_set_colour(make_colour_rgb(255, 190, 150));
+        draw_rectangle(gui_w * 0.5 - 260, 112, gui_w * 0.5 + 260, 128, true);
+    }
 
     draw_set_colour(make_colour_rgb(225, 215, 190));
     draw_text(350, 54, "Timeline:");
@@ -206,7 +230,12 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
         [420, 286],
         [580, 248]
     ];
-    var enemy_slots = [
+    var enemy_slots = boss_battle ? [
+        [gui_w - 270, 258],
+        [gui_w - 440, 292],
+        [gui_w - 610, 292],
+        [gui_w - 780, 292]
+    ] : [
         [gui_w - 100, 248],
         [gui_w - 260, 248],
         [gui_w - 420, 286],
@@ -254,7 +283,8 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
             draw_set_colour(make_colour_rgb(80, 70, 62));
             draw_ellipse(ex - 62, ey + 58, ex + 62, ey + 86, false);
             draw_set_alpha(1);
-            draw_sprite_ext(foe.sprite_index, foe.image_index, ex, ey + 20, combat_draw_scale, combat_draw_scale, 0, c_white, 1);
+            var foe_scale = (variable_instance_exists(foe, "enemy_role") && foe.enemy_role == "boss") ? 2.55 : combat_draw_scale;
+            draw_sprite_ext(foe.sprite_index, foe.image_index, ex, ey + 20, foe_scale, foe_scale, 0, c_white, 1);
 
             var enemy_hp_pct = max(0, foe.hp) / foe.max_hp;
             draw_set_colour(c_dkgray);
@@ -321,4 +351,43 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
     draw_set_colour(make_colour_rgb(225, 215, 190));
     draw_text(428, gui_h - 108, global.combat_message);
     draw_set_colour(c_white);
+}
+
+if (variable_global_exists("tutorial_popup_active") && global.tutorial_popup_active) {
+    var tw = display_get_gui_width();
+    var th = display_get_gui_height();
+    var panel_w = min(760, tw - 120);
+    var panel_h = 310;
+    var panel_x = (tw - panel_w) * 0.5;
+    var panel_y = (th - panel_h) * 0.5;
+    var old_halign_tut = draw_get_halign();
+    var old_valign_tut = draw_get_valign();
+
+    draw_set_alpha(0.72);
+    draw_set_colour(c_black);
+    draw_rectangle(0, 0, tw, th, false);
+    draw_set_alpha(1);
+
+    draw_set_colour(make_colour_rgb(12, 20, 32));
+    draw_rectangle(panel_x, panel_y, panel_x + panel_w, panel_y + panel_h, false);
+    draw_set_colour(make_colour_rgb(95, 180, 210));
+    draw_rectangle(panel_x, panel_y, panel_x + panel_w, panel_y + panel_h, true);
+    draw_set_colour(make_colour_rgb(24, 40, 58));
+    draw_rectangle(panel_x + 16, panel_y + 62, panel_x + panel_w - 16, panel_y + panel_h - 56, false);
+
+    draw_set_valign(fa_top);
+    draw_set_halign(fa_center);
+    draw_set_colour(c_aqua);
+    draw_text(panel_x + panel_w * 0.5, panel_y + 22, global.tutorial_popup_title);
+
+    draw_set_halign(fa_left);
+    draw_set_colour(c_white);
+    draw_text_ext(panel_x + 42, panel_y + 88, global.tutorial_popup_body, 22, panel_w - 84);
+
+    draw_set_halign(fa_center);
+    draw_set_colour(make_colour_rgb(190, 210, 220));
+    draw_text(panel_x + panel_w * 0.5, panel_y + panel_h - 34, "Press E, Enter, or Esc to continue");
+
+    draw_set_halign(old_halign_tut);
+    draw_set_valign(old_valign_tut);
 }
