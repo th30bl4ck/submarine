@@ -10,8 +10,8 @@
   "name":"obj_camera",
   "overriddenProperties":[],
   "parent":{
-    "name":"Objects",
-    "path":"folders/Objects.yy",
+    "name":"hidden_objects",
+    "path":"folders/Objects/hidden_objects.yy",
   },
   "parentObjectId":null,
   "persistent":false,

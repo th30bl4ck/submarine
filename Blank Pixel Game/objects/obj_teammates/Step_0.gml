@@ -14,9 +14,9 @@ if (instance_exists(obj_player) && point_distance(x, y, obj_player.x, obj_player
             name: recruit_name,
             hp: recruit_hp,
             max_hp: recruit_hp,
-            sprite: spr_survivor_1_idle,
-            idle_sprite: spr_survivor_1_idle,
-            walk_sprite: spr_survivor_1_walking,
+            sprite: recruit_idle_sprite,
+            idle_sprite: recruit_idle_sprite,
+            walk_sprite: recruit_walk_sprite,
             active: false
         };
         if (!variable_global_exists("teammate_collected_keys")) {

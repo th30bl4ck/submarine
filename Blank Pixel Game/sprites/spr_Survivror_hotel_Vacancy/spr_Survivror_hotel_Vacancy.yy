@@ -31,6 +31,7 @@
   "name":"spr_Survivror_hotel_Vacancy",
   "nineSlice":null,
   "origin":0,
+  "origin":9,
   "parent":{
     "name":"dome_sprites",
     "path":"folders/Sprites/dome_sprites.yy",
@@ -105,6 +106,8 @@
     "volume":1.0,
     "xorigin":0,
     "yorigin":0,
+    "xorigin":64,
+    "yorigin":212,
   },
   "swatchColours":null,
   "swfPrecision":0.5,
