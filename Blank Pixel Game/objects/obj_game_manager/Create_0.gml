@@ -42,6 +42,9 @@ if (!variable_global_exists("teammate_sprite_assignments")) {
 if (!variable_global_exists("teammate_used_sprite_numbers")) {
     global.teammate_used_sprite_numbers = [];
 }
+if (!variable_global_exists("surface_defeated_enemies")) {
+    global.surface_defeated_enemies = [];
+}
 if (!variable_global_exists("teammate_menu_open")) {
     global.teammate_menu_open = false;
 }
@@ -74,6 +77,12 @@ if (!variable_global_exists("tutorial_seen_loot")) {
 if (!variable_global_exists("tutorial_seen_combat")) {
     global.tutorial_seen_combat = false;
 }
+if (!variable_global_exists("win_screen_active")) {
+    global.win_screen_active = false;
+}
+if (!variable_global_exists("win_screen_seen")) {
+    global.win_screen_seen = false;
+}
 var city_level = instance_exists(obj_resource_manager) ? obj_resource_manager.dome_level : 1;
 global.city_hp_bonus = max(0, city_level - 1) * 15;
 global.city_damage_bonus = max(0, city_level - 1) * 4;
@@ -82,8 +91,8 @@ global.combat_moves = [
         name: "Harpoon Strike",
         desc: "Reliable damage",
         kind: "damage",
-        min_value: 11 + global.city_damage_bonus,
-        max_value: 19 + global.city_damage_bonus,
+        min_value: 1100 + global.city_damage_bonus,
+        max_value: 1900 + global.city_damage_bonus,
         cooldown: 0
     },
     {
