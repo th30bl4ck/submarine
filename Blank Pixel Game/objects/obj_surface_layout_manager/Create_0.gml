@@ -61,6 +61,42 @@ function surface_cache(_obj, _x) {
     return surface_make(_obj, _x, ground_y, _obj == obj_loot_safe ? 1.5 : 1.4, _obj == obj_loot_safe ? 1.5 : 1.4);
 }
 
+function surface_cactus(_x, _sprite, _scale) {
+    var cactus_scale = abs(_scale);
+    var cactus_bottom_y = ground_y + 37;
+    var cactus_y = cactus_bottom_y - (sprite_get_height(_sprite) - sprite_get_yoffset(_sprite)) * cactus_scale;
+    var inst = instance_create_layer(_x, cactus_y, "Instances", obj_surface_decoration);
+    if (instance_exists(inst)) {
+        inst.sprite_index = _sprite;
+        inst.image_index = 0;
+        inst.image_speed = 0;
+        inst.image_xscale = (_x < center_x) ? cactus_scale : -cactus_scale;
+        inst.image_yscale = cactus_scale;
+        inst.depth = 12;
+    }
+    return inst;
+}
+
+surface_cactus(center_x - 340, spr_land_cactus_2, 1.4);
+surface_cactus(center_x - 1320, spr_land_cactus_1, 1.8);
+surface_cactus(center_x - 1880, spr_land_cactus_2, 1.5);
+surface_cactus(center_x - 2740, spr_land_cactus_1, 1.6);
+surface_cactus(center_x - 3560, spr_land_cactus_2, 1.35);
+surface_cactus(center_x - 4700, spr_land_cactus_1, 1.9);
+surface_cactus(center_x - 5480, spr_land_cactus_2, 1.5);
+surface_cactus(center_x - 6820, spr_land_cactus_1, 1.7);
+surface_cactus(center_x - 7640, spr_land_cactus_2, 1.4);
+
+surface_cactus(center_x + 360, spr_land_cactus_1, 1.45);
+surface_cactus(center_x + 1320, spr_land_cactus_2, 1.6);
+surface_cactus(center_x + 1880, spr_land_cactus_1, 1.35);
+surface_cactus(center_x + 2380, spr_land_cactus_2, 1.75);
+surface_cactus(center_x + 3400, spr_land_cactus_1, 1.5);
+surface_cactus(center_x + 4560, spr_land_cactus_2, 1.8);
+surface_cactus(center_x + 5720, spr_land_cactus_1, 1.4);
+surface_cactus(center_x + 6720, spr_land_cactus_2, 1.55);
+surface_cactus(center_x + 7580, spr_land_cactus_1, 1.7);
+
 var left_gate_face = 1;
 surface_cache(obj_loot_chest, center_x - 520);
 surface_make(obj_teammates, center_x - 780, ground_y, 2, 1.5);
