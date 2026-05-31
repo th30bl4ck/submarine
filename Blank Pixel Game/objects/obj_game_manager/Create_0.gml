@@ -91,8 +91,8 @@ global.combat_moves = [
         name: "Harpoon Strike",
         desc: "Reliable damage",
         kind: "damage",
-        min_value: 1100 + global.city_damage_bonus,
-        max_value: 1900 + global.city_damage_bonus,
+        min_value: 11 + global.city_damage_bonus,
+        max_value: 19 + global.city_damage_bonus,
         cooldown: 0
     },
     {
