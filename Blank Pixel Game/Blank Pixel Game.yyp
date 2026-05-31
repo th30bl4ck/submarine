@@ -90,6 +90,8 @@
     {"id":{"name":"spr_gate_closed","path":"sprites/spr_gate_closed/spr_gate_closed.yy",},},
     {"id":{"name":"spr_gate_open","path":"sprites/spr_gate_open/spr_gate_open.yy",},},
     {"id":{"name":"spr_key","path":"sprites/spr_key/spr_key.yy",},},
+    {"id":{"name":"spr_land_cactus_1","path":"sprites/spr_land_cactus_1/spr_land_cactus_1.yy",},},
+    {"id":{"name":"spr_land_cactus_2","path":"sprites/spr_land_cactus_2/spr_land_cactus_2.yy",},},
     {"id":{"name":"spr_land_deadtree_1","path":"sprites/spr_land_deadtree_1/spr_land_deadtree_1.yy",},},
     {"id":{"name":"spr_land_deadtree_2","path":"sprites/spr_land_deadtree_2/spr_land_deadtree_2.yy",},},
     {"id":{"name":"spr_land_deadtree_3","path":"sprites/spr_land_deadtree_3/spr_land_deadtree_3.yy",},},
