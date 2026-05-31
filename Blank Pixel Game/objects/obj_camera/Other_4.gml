@@ -5,10 +5,16 @@ if (!variable_instance_exists(id, "cam")) {
     cam = camera_create();
 }
 
-var view_w = 1366;
-var view_h = 768;
+var view_w = 1000;
+var view_h = 563;
 camera_set_view_size(cam, view_w, view_h);
 view_camera[0] = cam;
+
+if (!instance_exists(obj_player)) {
+    var spawn_x = (room == room_surface) ? room_width * 0.5 + 80 : 3724;
+    var spawn_y = (room == room_surface) ? 714 : 722;
+    instance_create_layer(spawn_x, spawn_y, "Instances", obj_player);
+}
 
 if (instance_exists(obj_player)) {
     var target_x = clamp(obj_player.x - view_w * 0.5, 0, max(0, room_width - view_w));

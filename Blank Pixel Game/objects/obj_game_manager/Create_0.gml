@@ -6,6 +6,13 @@ player_spawn_y = 2300;
 if (!instance_exists(obj_resource_manager)) {
     instance_create_depth(0, 0, 0, obj_resource_manager);
 }
+if (!variable_global_exists("background_music_id")) {
+    global.background_music_id = noone;
+}
+if (!audio_is_playing(lofi_music_library_coffee_lofi_chill_lofi_ambient_458901)) {
+    global.background_music_id = audio_play_sound(lofi_music_library_coffee_lofi_chill_lofi_ambient_458901, 0, true);
+    audio_sound_gain(global.background_music_id, 0.18, 0);
+}
 global.combat_active = false;
 global.combat_enemy = noone;
 global.combat_turn = "player";
@@ -44,13 +51,39 @@ if (!variable_global_exists("teammate_manager_near")) {
 if (!variable_global_exists("teammate_recruit_near")) {
     global.teammate_recruit_near = false;
 }
+if (!variable_global_exists("tutorial_popup_active")) {
+    global.tutorial_popup_active = false;
+    global.tutorial_popup_title = "";
+    global.tutorial_popup_body = "";
+}
+if (!variable_global_exists("tutorial_popup_block_input")) {
+    global.tutorial_popup_block_input = 0;
+}
+if (!variable_global_exists("tutorial_seen_hotel")) {
+    global.tutorial_seen_hotel = false;
+}
+if (!variable_global_exists("tutorial_seen_upgrade_shop")) {
+    global.tutorial_seen_upgrade_shop = false;
+}
+if (!variable_global_exists("tutorial_seen_survivor_equip")) {
+    global.tutorial_seen_survivor_equip = false;
+}
+if (!variable_global_exists("tutorial_seen_loot")) {
+    global.tutorial_seen_loot = false;
+}
+if (!variable_global_exists("tutorial_seen_combat")) {
+    global.tutorial_seen_combat = false;
+}
+var city_level = instance_exists(obj_resource_manager) ? obj_resource_manager.dome_level : 1;
+global.city_hp_bonus = max(0, city_level - 1) * 15;
+global.city_damage_bonus = max(0, city_level - 1) * 4;
 global.combat_moves = [
     {
         name: "Harpoon Strike",
         desc: "Reliable damage",
         kind: "damage",
-        min_value: 11,
-        max_value: 19,
+        min_value: 11 + global.city_damage_bonus,
+        max_value: 19 + global.city_damage_bonus,
         cooldown: 0
     },
     {
@@ -65,16 +98,16 @@ global.combat_moves = [
         name: "Repair Suit",
         desc: "Heal one hero",
         kind: "heal",
-        min_value: 16,
-        max_value: 24,
+        min_value: 16 + global.city_damage_bonus,
+        max_value: 24 + global.city_damage_bonus,
         cooldown: 3
     },
     {
         name: "Desperate Flare",
         desc: "Risky high damage",
         kind: "damage",
-        min_value: 5,
-        max_value: 28,
+        min_value: 5 + global.city_damage_bonus,
+        max_value: 28 + global.city_damage_bonus,
         cooldown: 2
     }
 ];

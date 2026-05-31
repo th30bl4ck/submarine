@@ -33,7 +33,7 @@
   "resourceVersion":"2.0",
   "sequence":{
     "$GMSequence":"v1",
-    "%Name":"spr_land_deadtree_1",
+    "%Name":"spr_land_deadtree_3",
     "autoRecord":true,
     "backdropHeight":768,
     "backdropImageOpacity":0.5,
@@ -57,7 +57,7 @@
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
     },
-    "name":"spr_land_deadtree_1",
+    "name":"spr_land_deadtree_3",
     "playback":1,
     "playbackSpeed":30.0,
     "playbackSpeedType":0,

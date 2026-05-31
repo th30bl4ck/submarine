@@ -2,6 +2,23 @@ if (!variable_global_exists("combat_active")) {
     global.combat_active = false;
 }
 
+if (variable_global_exists("tutorial_popup_active") && global.tutorial_popup_active) {
+    vx = 0;
+    vy = 0;
+    if (keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_escape)) {
+        global.tutorial_popup_active = false;
+        global.tutorial_popup_block_input = 2;
+    }
+    exit;
+}
+
+if (variable_global_exists("tutorial_popup_block_input") && global.tutorial_popup_block_input > 0) {
+    global.tutorial_popup_block_input--;
+    vx = 0;
+    vy = 0;
+    exit;
+}
+
 var zone_w = 1366;
 var zone_left_ocean_min = 0;
 var zone_left_tunnel_min = zone_w;
@@ -10,6 +27,25 @@ var zone_right_tunnel_min = zone_w * 3;
 var zone_right_ocean_min = zone_w * 4;
 var zone_world_max = zone_w * 5;
 var player_in_safe_dome = (room == room_dome && x >= zone_left_tunnel_min && x < zone_right_ocean_min);
+function player_hits_solid(_x, _y) {
+    return place_meeting(_x, _y, obj_platform) || place_meeting(_x, _y, obj_big_rock);
+}
+
+var stuck_rock = instance_place(x, y, obj_big_rock);
+if (stuck_rock != noone) {
+    if (x < stuck_rock.x) {
+        x = stuck_rock.bbox_left - (bbox_right - x) - 1;
+    } else {
+        x = stuck_rock.bbox_right + (x - bbox_left) + 1;
+    }
+    vx = 0;
+}
+var desired_player_max_hp = 100 + (variable_global_exists("city_hp_bonus") ? global.city_hp_bonus : 0);
+if (max_hp != desired_player_max_hp) {
+    var player_hp_delta = desired_player_max_hp - max_hp;
+    max_hp = desired_player_max_hp;
+    hp = clamp(hp + player_hp_delta, 1, max_hp);
+}
 
 if (room != room_surface) {
     with (obj_teammate_follower) instance_destroy();
@@ -41,7 +77,7 @@ if (room != room_dome) {
             }
         }
         if (found_roamer == noone) {
-            found_roamer = instance_create_layer(zone_dome_min + 360 + roam_i * 80, 736, "Instances", obj_teammate_roamer);
+            found_roamer = instance_create_layer(zone_dome_min + 360 + roam_i * 80, 722, "Instances", obj_teammate_roamer);
             found_roamer.party_slot = roam_i;
             found_roamer.target_x = found_roamer.x;
             found_roamer.wait_timer = irandom_range(30, 120);
@@ -64,7 +100,7 @@ if (room == room_surface && !global.combat_active && variable_global_exists("tea
                 }
             }
             if (found_follower == noone) {
-                found_follower = instance_create_layer(x - 42 - follow_number * 34, y + 28, "Instances", obj_teammate_follower);
+                found_follower = instance_create_layer(x - 42 - follow_number * 34, 722, "Instances", obj_teammate_follower);
                 found_follower.party_slot = follow_i;
             }
             found_follower.follow_order = follow_number;
@@ -303,7 +339,18 @@ if (global.combat_active) {
                     var edmg = irandom_range(8, 16);
                     var move_text = "attacks";
 
-                    if (role == "shaman") {
+                    if (role == "boss") {
+                        if (move_roll < 35) {
+                            edmg = irandom_range(26, 38);
+                            move_text = "crushes";
+                        } else if (move_roll < 70) {
+                            edmg = irandom_range(18, 28);
+                            move_text = "rakes";
+                        } else {
+                            edmg = irandom_range(14, 22);
+                            move_text = "surges into";
+                        }
+                    } else if (role == "shaman") {
                         edmg = irandom_range(5, 11);
                         move_text = choose("curses", "hexes");
                     } else if (role == "tank") {
@@ -327,6 +374,9 @@ if (global.combat_active) {
                         move_text = choose("swipes at", "bites");
                     }
 
+                    if (variable_instance_exists(enemy_attacker, "enemy_damage_bonus")) {
+                        edmg += enemy_attacker.enemy_damage_bonus;
+                    }
                     if (global.combat_party[target_index].guard) edmg = ceil(edmg * 0.4);
                     global.combat_party[target_index].hp -= edmg;
                     global.combat_float_texts[array_length(global.combat_float_texts)] = { side: "party", index: target_index, text: "-" + string(edmg), col: make_colour_rgb(255, 80, 70), timer: 48, yoff: 0 };
@@ -397,7 +447,19 @@ if (global.combat_active) {
             var tmx = device_mouse_x_to_gui(0);
             var tmy = device_mouse_y_to_gui(0);
             var tgw = display_get_gui_width();
-            var enemy_gui_slots = [
+            var click_boss_battle = false;
+            for (var click_boss_i = 0; click_boss_i < array_length(global.combat_enemies); click_boss_i++) {
+                var click_boss = global.combat_enemies[click_boss_i];
+                if (instance_exists(click_boss) && variable_instance_exists(click_boss, "enemy_role") && click_boss.enemy_role == "boss") {
+                    click_boss_battle = true;
+                }
+            }
+            var enemy_gui_slots = click_boss_battle ? [
+                [tgw - 270, 258],
+                [tgw - 440, 292],
+                [tgw - 610, 292],
+                [tgw - 780, 292]
+            ] : [
                 [tgw - 100, 248],
                 [tgw - 260, 248],
                 [tgw - 420, 286],
@@ -582,7 +644,7 @@ if (place_meeting(x, y, obj_enemy)) {
         combat_saved_xscale = image_xscale;
 
         var max_combat_enemies = 4;
-        var combat_join_distance = 360;
+        var combat_join_distance = 430;
         global.combat_enemies = [];
         global.combat_enemies[0] = foe_touch;
         var enemy_count = 1;
@@ -686,6 +748,12 @@ if (place_meeting(x, y, obj_enemy)) {
         global.combat_message = "An enemy team blocks the path.";
         global.combat_guard = false;
         global.combat_selected_move = 0;
+        if (!variable_global_exists("tutorial_seen_combat") || !global.tutorial_seen_combat) {
+            global.tutorial_seen_combat = true;
+            global.tutorial_popup_active = true;
+            global.tutorial_popup_title = "COMBAT";
+            global.tutorial_popup_body = "Combat is turn based.\n\nPress 1-4 or click a move, then choose an enemy target when asked. Brace reduces incoming damage, Repair Suit heals the weakest ally, and equipped survivors take turns beside you. Upgrading the city raises your max HP, survivor max HP, and move power.";
+        }
         exit;
     }
 }
@@ -741,8 +809,8 @@ vy += grav;
 vy = min(vy, 18);
 
 // Horizontal collision
-if (place_meeting(x + vx, y, obj_platform)) {
-    while (!place_meeting(x + sign(vx), y, obj_platform)) {
+if (player_hits_solid(x + vx, y)) {
+    while (!player_hits_solid(x + sign(vx), y)) {
         x += sign(vx);
     }
     vx = 0;
@@ -767,8 +835,8 @@ if (room == room_ocean_floor_left_1 && x >= room_width - 14 && move_right) {
 
 // Vertical collision
 on_ground = false;
-if (place_meeting(x, y + vy, obj_platform)) {
-    while (!place_meeting(x, y + sign(vy), obj_platform)) {
+if (player_hits_solid(x, y + vy)) {
+    while (!player_hits_solid(x, y + sign(vy))) {
         y += sign(vy);
     }
     if (vy > 0) on_ground = true;
@@ -805,7 +873,7 @@ if (player_in_water) {
 var near_sub = false;
 if (instance_exists(obj_submarine)) {
     var dist = point_distance(x, y, obj_submarine.x, obj_submarine.y);
-    if (dist < 60) {
+    if (dist < 120) {
         near_sub = true;
     }
 }
@@ -814,12 +882,12 @@ if (interact && near_sub) {
     vx = 0;
     vy = 0;
     if (room == room_dome && player_in_ocean) {
-        x = 192;
-        y = 704;
+        x = 8276;
+        y = 714;
         room_goto(room_surface);
     } else if (room == room_ocean_floor_right_1) {
-        x = 192;
-        y = 704;
+        x = 8276;
+        y = 714;
         room_goto(room_surface);
     } else if (room == room_surface) {
         x = zone_right_ocean_min + 352;

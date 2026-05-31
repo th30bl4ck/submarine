@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_tank",
-    "path":"sprites/spr_tank/spr_tank.yy",
+    "name":"spr_enemy_tank",
+    "path":"sprites/spr_enemy_tank/spr_enemy_tank.yy",
   },
   "spriteMaskId":null,
   "visible":true,
