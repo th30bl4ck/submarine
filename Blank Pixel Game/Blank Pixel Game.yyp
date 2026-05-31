@@ -68,6 +68,7 @@
     {"id":{"name":"obj_player","path":"objects/obj_player/obj_player.yy",},},
     {"id":{"name":"obj_resource_manager","path":"objects/obj_resource_manager/obj_resource_manager.yy",},},
     {"id":{"name":"obj_shaman","path":"objects/obj_shaman/obj_shaman.yy",},},
+    {"id":{"name":"obj_start_menu","path":"objects/obj_start_menu/obj_start_menu.yy",},},
     {"id":{"name":"obj_submarine","path":"objects/obj_submarine/obj_submarine.yy",},},
     {"id":{"name":"obj_surface_boss","path":"objects/obj_surface_boss/obj_surface_boss.yy",},},
     {"id":{"name":"obj_surface_gate","path":"objects/obj_surface_gate/obj_surface_gate.yy",},},
@@ -83,6 +84,7 @@
     {"id":{"name":"room_dome","path":"rooms/room_dome/room_dome.yy",},},
     {"id":{"name":"room_ocean_floor_left_1","path":"rooms/room_ocean_floor_left_1/room_ocean_floor_left_1.yy",},},
     {"id":{"name":"room_ocean_floor_right_1","path":"rooms/room_ocean_floor_right_1/room_ocean_floor_right_1.yy",},},
+    {"id":{"name":"room_start_menu","path":"rooms/room_start_menu/room_start_menu.yy",},},
     {"id":{"name":"room_surface","path":"rooms/room_surface/room_surface.yy",},},
     {"id":{"name":"scr_player_die","path":"scripts/scr_player_die/scr_player_die.yy",},},
     {"id":{"name":"spr_background_dome_1","path":"sprites/spr_background_dome_1/spr_background_dome_1.yy",},},
@@ -155,6 +157,7 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
+    {"roomId":{"name":"room_start_menu","path":"rooms/room_start_menu/room_start_menu.yy",},},
     {"roomId":{"name":"room_dome","path":"rooms/room_dome/room_dome.yy",},},
     {"roomId":{"name":"room_surface","path":"rooms/room_surface/room_surface.yy",},},
     {"roomId":{"name":"room_ocean_floor_right_1","path":"rooms/room_ocean_floor_right_1/room_ocean_floor_right_1.yy",},},

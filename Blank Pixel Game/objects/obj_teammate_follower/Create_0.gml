@@ -1,5 +1,6 @@
 party_slot = -1;
 follow_order = 0;
+ground_y = 722;
 move_speed = 0.42;
 max_follow_speed = 5.5;
 vx = 0;

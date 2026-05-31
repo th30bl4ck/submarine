@@ -1,6 +1,14 @@
 show_prompt = false;
 
-if (opened || !instance_exists(obj_player)) exit;
+if (opened) {
+    if (object_index == obj_loot_safe && image_index >= image_number - 1) {
+        image_index = image_number - 1;
+        image_speed = 0;
+    }
+    exit;
+}
+
+if (!instance_exists(obj_player)) exit;
 
 if (point_distance(x, y, obj_player.x, obj_player.y) < interact_range) {
     show_prompt = true;
@@ -19,6 +27,8 @@ if (point_distance(x, y, obj_player.x, obj_player.y) < interact_range) {
         opened = true;
         show_prompt = false;
         if (object_index == obj_loot_safe) {
+            image_index = 0;
+            image_speed = 0.15;
             image_alpha = 0.55;
         } else {
             sprite_index = spr_chest_open_empty;

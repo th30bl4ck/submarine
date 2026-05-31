@@ -41,7 +41,7 @@ if (room != room_dome) {
             }
         }
         if (found_roamer == noone) {
-            found_roamer = instance_create_layer(zone_dome_min + 360 + roam_i * 80, 736, "Instances", obj_teammate_roamer);
+            found_roamer = instance_create_layer(zone_dome_min + 360 + roam_i * 80, 722, "Instances", obj_teammate_roamer);
             found_roamer.party_slot = roam_i;
             found_roamer.target_x = found_roamer.x;
             found_roamer.wait_timer = irandom_range(30, 120);
@@ -64,7 +64,7 @@ if (room == room_surface && !global.combat_active && variable_global_exists("tea
                 }
             }
             if (found_follower == noone) {
-                found_follower = instance_create_layer(x - 42 - follow_number * 34, y + 28, "Instances", obj_teammate_follower);
+                found_follower = instance_create_layer(x - 42 - follow_number * 34, 722, "Instances", obj_teammate_follower);
                 found_follower.party_slot = follow_i;
             }
             found_follower.follow_order = follow_number;
@@ -829,11 +829,11 @@ if (interact && near_sub) {
     vy = 0;
     if (room == room_dome && player_in_ocean) {
         x = 8276;
-        y = 704;
+        y = 714;
         room_goto(room_surface);
     } else if (room == room_ocean_floor_right_1) {
         x = 8276;
-        y = 704;
+        y = 714;
         room_goto(room_surface);
     } else if (room == room_surface) {
         x = zone_right_ocean_min + 352;

@@ -1,6 +1,6 @@
 center_x = room_width * 0.5;
-floor_y = 744;
-ground_y = 704;
+floor_y = 768;
+ground_y = 728;
 
 var platform_w = 384;
 for (var floor_x = platform_w * 0.5; floor_x < room_width + platform_w * 0.5; floor_x += platform_w) {
@@ -9,21 +9,21 @@ for (var floor_x = platform_w * 0.5; floor_x < room_width + platform_w * 0.5; fl
     floor_inst.image_yscale = 1;
 }
 
-var sub = instance_create_layer(center_x, 640, "Instances", obj_submarine);
+var sub = instance_create_layer(center_x, 664, "Instances", obj_submarine);
 sub.image_xscale = 2;
 sub.image_yscale = 2;
 
 function surface_make(_obj, _x, _y, _sx, _sy) {
     var inst = instance_create_layer(_x, _y, "Instances", _obj);
     if (instance_exists(inst)) {
-        inst.image_xscale = _sx;
+        inst.image_xscale = (_x < center_x) ? abs(_sx) : -abs(_sx);
         inst.image_yscale = _sy;
     }
     return inst;
 }
 
 function surface_key(_x, _level) {
-    var inst = surface_make(obj_surface_key, _x, 704, 1.6, 1.6);
+    var inst = surface_make(obj_surface_key, _x, ground_y, 1.6, 1.6);
     if (instance_exists(inst)) {
         inst.key_id = _level;
     }
@@ -31,7 +31,7 @@ function surface_key(_x, _level) {
 }
 
 function surface_gate(_x, _level, _dir) {
-    var inst = surface_make(obj_surface_gate, _x, 602, 2 * _dir, 2.6);
+    var inst = surface_make(obj_surface_gate, _x, 626, 2 * _dir, 2.6);
     if (instance_exists(inst)) {
         inst.required_key = _level;
     }
@@ -39,7 +39,14 @@ function surface_gate(_x, _level, _dir) {
 }
 
 function surface_enemy(_obj, _x, _sx) {
-    var inst = surface_make(_obj, _x, ground_y, _sx, _sx);
+    var enemy_y = ground_y;
+    if (_obj == obj_shaman) {
+        enemy_y = ground_y - 32 * _sx;
+    }
+    var inst = surface_make(_obj, _x, enemy_y, _sx, _sx);
+    if (instance_exists(inst)) {
+        inst.image_xscale = (_x < center_x) ? -abs(_sx) : abs(_sx);
+    }
     return inst;
 }
 
@@ -83,5 +90,8 @@ for (var side = -1; side <= 1; side += 2) {
     surface_enemy(obj_tank, center_x + dir * 7040, 2.2);
     surface_cache(obj_loot_safe, center_x + dir * 7280);
     surface_make(obj_teammates, center_x + dir * 7460, ground_y, 2, 1.5);
-    surface_make(obj_surface_boss, center_x + dir * 7760, 614, 2.4 * gate_face, 2.4);
+    var boss_inst = surface_make(obj_surface_boss, center_x + dir * 7760, 638, 2.4, 2.4);
+    if (instance_exists(boss_inst)) {
+        boss_inst.image_xscale = (boss_inst.x < center_x) ? -2.4 : 2.4;
+    }
 }

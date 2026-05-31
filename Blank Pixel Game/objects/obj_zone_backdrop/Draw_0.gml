@@ -9,7 +9,9 @@ if (room == room_surface) {
 }
 
 draw_sprite_stretched(spr_background_underwater, 0, 0, 0, zone_w, zone_h);
+draw_sprite_stretched(spr_background_underwater, 0, zone_w, 0, zone_w, zone_h);
 draw_sprite_stretched(spr_background_tunnel, 0, zone_w, 0, zone_w, zone_h);
+
 var dome_bg = spr_background_dome_1;
 if (instance_exists(obj_resource_manager)) {
     switch (clamp(obj_resource_manager.dome_level, 1, 4)) {
@@ -19,5 +21,6 @@ if (instance_exists(obj_resource_manager)) {
     }
 }
 draw_sprite_stretched(dome_bg, 0, zone_w * 2, 0, zone_w, zone_h);
+draw_sprite_stretched(spr_background_underwater, 0, zone_w * 3, 0, zone_w, zone_h);
 draw_sprite_stretched(spr_background_tunnel, 0, zone_w * 3, 0, zone_w, zone_h);
 draw_sprite_stretched(spr_background_underwater, 0, zone_w * 4, 0, zone_w, zone_h);

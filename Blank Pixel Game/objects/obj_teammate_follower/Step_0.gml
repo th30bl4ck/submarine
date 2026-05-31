@@ -17,9 +17,9 @@ if (!recruit.active) {
 var idle_sprite = variable_struct_exists(recruit, "idle_sprite") ? recruit.idle_sprite : spr_survivor_1_idle;
 var walk_sprite = variable_struct_exists(recruit, "walk_sprite") ? recruit.walk_sprite : spr_survivor_1_walking;
 var target_x = obj_player.x - (48 + follow_order * 34) * sign(obj_player.image_xscale);
-var target_y = obj_player.y + 12;
+var target_y = ground_y;
 var dist_to_target = point_distance(x, y, target_x, target_y);
-var follower_is_moving = (abs(vx) > 0.08 || abs(vy) > 0.08) || (obj_player.vx != 0 || obj_player.vy != 0);
+var follower_is_moving = (abs(vx) > 0.08 || abs(vy) > 0.08) || (obj_player.vx != 0);
 
 if (dist_to_target > 10) {
     var move_dir = point_direction(x, y, target_x, target_y);
@@ -39,6 +39,7 @@ if (current_speed > max_follow_speed) {
 
 x += vx;
 y += vy;
+y = clamp(y, ground_y - 2, ground_y + 2);
 vx *= 0.86;
 vy *= 0.86;
 
