@@ -19,6 +19,35 @@ if (variable_global_exists("tutorial_popup_block_input") && global.tutorial_popu
     exit;
 }
 
+if (variable_global_exists("win_screen_active") && global.win_screen_active) {
+    vx = 0;
+    vy = 0;
+    if (mouse_check_button_pressed(mb_left)) {
+        var win_mx = device_mouse_x_to_gui(0);
+        var win_my = device_mouse_y_to_gui(0);
+        var win_gui_w = display_get_gui_width();
+        var win_gui_h = display_get_gui_height();
+        var win_panel_w = min(620, win_gui_w - 80);
+        var win_panel_h = 280;
+        var win_panel_x = (win_gui_w - win_panel_w) * 0.5;
+        var win_panel_y = (win_gui_h - win_panel_h) * 0.5;
+        var win_button_w = 210;
+        var win_button_h = 54;
+        var win_gap = 24;
+        var win_buttons_y = win_panel_y + win_panel_h - 88;
+        var win_keep_x = win_panel_x + win_panel_w * 0.5 - win_button_w - win_gap * 0.5;
+        var win_quit_x = win_panel_x + win_panel_w * 0.5 + win_gap * 0.5;
+
+        if (point_in_rectangle(win_mx, win_my, win_keep_x, win_buttons_y, win_keep_x + win_button_w, win_buttons_y + win_button_h)) {
+            global.win_screen_active = false;
+            global.tutorial_popup_block_input = 2;
+        } else if (point_in_rectangle(win_mx, win_my, win_quit_x, win_buttons_y, win_quit_x + win_button_w, win_buttons_y + win_button_h)) {
+            game_end();
+        }
+    }
+    exit;
+}
+
 var zone_w = 1366;
 var zone_left_ocean_min = 0;
 var zone_left_tunnel_min = zone_w;
@@ -29,6 +58,26 @@ var zone_world_max = zone_w * 5;
 var player_in_safe_dome = (room == room_dome && x >= zone_left_tunnel_min && x < zone_right_ocean_min);
 function player_hits_solid(_x, _y) {
     return place_meeting(_x, _y, obj_platform) || place_meeting(_x, _y, obj_big_rock);
+}
+
+function mark_surface_enemy_defeated(_enemy_inst) {
+    if (room != room_surface || !instance_exists(_enemy_inst) || !variable_instance_exists(_enemy_inst, "enemy_persist_id")) {
+        return;
+    }
+    if (variable_instance_exists(_enemy_inst, "enemy_role") && _enemy_inst.enemy_role == "boss" && (!variable_global_exists("win_screen_seen") || !global.win_screen_seen)) {
+        global.win_screen_seen = true;
+        global.win_screen_active = true;
+    }
+    if (!variable_global_exists("surface_defeated_enemies")) {
+        global.surface_defeated_enemies = [];
+    }
+    var defeated_key = _enemy_inst.enemy_persist_id;
+    for (var defeated_i = 0; defeated_i < array_length(global.surface_defeated_enemies); defeated_i++) {
+        if (global.surface_defeated_enemies[defeated_i] == defeated_key) {
+            return;
+        }
+    }
+    global.surface_defeated_enemies[array_length(global.surface_defeated_enemies)] = defeated_key;
 }
 
 var stuck_rock = instance_place(x, y, obj_big_rock);
@@ -511,6 +560,7 @@ if (global.combat_active) {
                 var target_alive_enemy = global.combat_enemies[tea];
                 if (instance_exists(target_alive_enemy)) {
                     if (target_alive_enemy.hp <= 0) {
+                        mark_surface_enemy_defeated(target_alive_enemy);
                         with (target_alive_enemy) instance_destroy();
                     } else {
                         targeted_enemies_alive = true;
@@ -609,6 +659,7 @@ if (global.combat_active) {
                 var alive_enemy = global.combat_enemies[ea];
                 if (instance_exists(alive_enemy)) {
                     if (alive_enemy.hp <= 0) {
+                        mark_surface_enemy_defeated(alive_enemy);
                         with (alive_enemy) instance_destroy();
                     } else {
                         enemies_alive = true;
@@ -846,6 +897,7 @@ y += vy;
 
 // Clamp to room
 x = clamp(x, 14, room_width - 14);
+y = clamp(y, 14, room_height - 14);
 
 // Oxygen logic
 if (player_in_water) {

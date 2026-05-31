@@ -45,13 +45,32 @@ function surface_gate(_x, _level, _dir, _code, _label) {
     return inst;
 }
 
+if (!variable_global_exists("surface_defeated_enemies")) {
+    global.surface_defeated_enemies = [];
+}
+
+function surface_enemy_defeated(_enemy_key) {
+    for (var defeated_i = 0; defeated_i < array_length(global.surface_defeated_enemies); defeated_i++) {
+        if (global.surface_defeated_enemies[defeated_i] == _enemy_key) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function surface_enemy(_obj, _x, _sx) {
+    var enemy_key = object_get_name(_obj) + "_" + string(round(_x - center_x));
+    if (surface_enemy_defeated(enemy_key)) {
+        return noone;
+    }
+
     var enemy_y = ground_y;
     if (_obj == obj_shaman) {
         enemy_y = ground_y - 32 * _sx;
     }
     var inst = surface_make(_obj, _x, enemy_y, _sx, _sx);
     if (instance_exists(inst)) {
+        inst.enemy_persist_id = enemy_key;
         inst.image_xscale = (_x < center_x) ? -abs(_sx) : abs(_sx);
     }
     return inst;
@@ -171,7 +190,13 @@ surface_enemy(obj_tank, center_x + 6960, 2.0);
 surface_enemy(obj_enemy, center_x + 7080, 1.7);
 surface_cache(obj_loot_safe, center_x + 7280);
 surface_make(obj_teammates, center_x + 7460, ground_y, 2, 1.5);
-var boss_inst = surface_make(obj_surface_boss, center_x + 7760, ground_y - (128 - 64) * 2.4, 2.4, 2.4);
-if (instance_exists(boss_inst)) {
-    boss_inst.image_xscale = 2.4;
+if (!surface_enemy_defeated("obj_surface_boss_7760")) {
+    var boss_scale = 2.4;
+    var boss_bottom_y = ground_y + 48;
+    var boss_y = boss_bottom_y - (sprite_get_height(spr_enemy_boss_idle) - sprite_get_yoffset(spr_enemy_boss_idle)) * boss_scale;
+    var boss_inst = surface_make(obj_surface_boss, center_x + 7760, boss_y, boss_scale, boss_scale);
+    if (instance_exists(boss_inst)) {
+        boss_inst.enemy_persist_id = "obj_surface_boss_7760";
+        boss_inst.image_xscale = boss_scale;
+    }
 }

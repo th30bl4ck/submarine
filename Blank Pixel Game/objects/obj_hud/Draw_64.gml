@@ -284,17 +284,22 @@ if (variable_global_exists("combat_active") && global.combat_active && array_len
             draw_ellipse(ex - 62, ey + 58, ex + 62, ey + 86, false);
             draw_set_alpha(1);
             var foe_scale = (variable_instance_exists(foe, "enemy_role") && foe.enemy_role == "boss") ? 2.55 : combat_draw_scale;
+            var foe_is_boss = variable_instance_exists(foe, "enemy_role") && foe.enemy_role == "boss";
             draw_sprite_ext(foe.sprite_index, foe.image_index, ex, ey + 20, foe_scale, foe_scale, 0, c_white, 1);
 
-            var enemy_hp_pct = max(0, foe.hp) / foe.max_hp;
-            draw_set_colour(c_dkgray);
-            draw_rectangle(ex - 50, ey + 108, ex + 50, ey + 116, false);
-            draw_set_colour(make_colour_rgb(190, 40, 45));
-            draw_rectangle(ex - 50, ey + 108, ex - 50 + floor(100 * enemy_hp_pct), ey + 116, false);
-            var foe_name = variable_instance_exists(foe, "enemy_display_name") ? foe.enemy_display_name : "Enemy";
-            if (variable_instance_exists(foe, "enemy_protect") && foe.enemy_protect > 0) foe_name += " +";
-            draw_set_colour(global.combat_phase == "target_select" ? c_yellow : c_white);
-            draw_text(ex - 50, ey + 120, string(ei + 1) + " " + foe_name);
+            if (!foe_is_boss) {
+                var enemy_hp_pct = max(0, foe.hp) / foe.max_hp;
+                draw_set_colour(c_dkgray);
+                draw_rectangle(ex - 50, ey + 108, ex + 50, ey + 116, false);
+                draw_set_colour(make_colour_rgb(190, 40, 45));
+                draw_rectangle(ex - 50, ey + 108, ex - 50 + floor(100 * enemy_hp_pct), ey + 116, false);
+            }
+            if (!foe_is_boss) {
+                var foe_name = variable_instance_exists(foe, "enemy_display_name") ? foe.enemy_display_name : "Enemy";
+                if (variable_instance_exists(foe, "enemy_protect") && foe.enemy_protect > 0) foe_name += " +";
+                draw_set_colour(global.combat_phase == "target_select" ? c_yellow : c_white);
+                draw_text(ex - 50, ey + 120, string(ei + 1) + " " + foe_name);
+            }
         }
     }
 
@@ -390,4 +395,61 @@ if (variable_global_exists("tutorial_popup_active") && global.tutorial_popup_act
 
     draw_set_halign(old_halign_tut);
     draw_set_valign(old_valign_tut);
+}
+
+if (variable_global_exists("win_screen_active") && global.win_screen_active) {
+    var win_gui_w = display_get_gui_width();
+    var win_gui_h = display_get_gui_height();
+    var win_panel_w = min(620, win_gui_w - 80);
+    var win_panel_h = 280;
+    var win_panel_x = (win_gui_w - win_panel_w) * 0.5;
+    var win_panel_y = (win_gui_h - win_panel_h) * 0.5;
+    var win_button_w = 210;
+    var win_button_h = 54;
+    var win_gap = 24;
+    var win_buttons_y = win_panel_y + win_panel_h - 88;
+    var win_keep_x = win_panel_x + win_panel_w * 0.5 - win_button_w - win_gap * 0.5;
+    var win_quit_x = win_panel_x + win_panel_w * 0.5 + win_gap * 0.5;
+    var old_halign_win = draw_get_halign();
+    var old_valign_win = draw_get_valign();
+    var win_mx = device_mouse_x_to_gui(0);
+    var win_my = device_mouse_y_to_gui(0);
+    var keep_hover = point_in_rectangle(win_mx, win_my, win_keep_x, win_buttons_y, win_keep_x + win_button_w, win_buttons_y + win_button_h);
+    var quit_hover = point_in_rectangle(win_mx, win_my, win_quit_x, win_buttons_y, win_quit_x + win_button_w, win_buttons_y + win_button_h);
+
+    draw_set_alpha(0.78);
+    draw_set_colour(c_black);
+    draw_rectangle(0, 0, win_gui_w, win_gui_h, false);
+    draw_set_alpha(1);
+
+    draw_set_colour(make_colour_rgb(10, 20, 32));
+    draw_rectangle(win_panel_x, win_panel_y, win_panel_x + win_panel_w, win_panel_y + win_panel_h, false);
+    draw_set_colour(make_colour_rgb(95, 180, 210));
+    draw_rectangle(win_panel_x, win_panel_y, win_panel_x + win_panel_w, win_panel_y + win_panel_h, true);
+
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_top);
+    draw_set_colour(make_colour_rgb(255, 220, 90));
+    draw_text(win_panel_x + win_panel_w * 0.5, win_panel_y + 38, "YOU WIN");
+    draw_set_colour(c_white);
+    draw_text(win_panel_x + win_panel_w * 0.5, win_panel_y + 92, "Thanks for playing!");
+    draw_set_colour(make_colour_rgb(190, 210, 220));
+    draw_text(win_panel_x + win_panel_w * 0.5, win_panel_y + 128, "The Surface Warden is defeated.");
+
+    draw_set_colour(keep_hover ? make_colour_rgb(70, 150, 105) : make_colour_rgb(42, 105, 76));
+    draw_rectangle(win_keep_x, win_buttons_y, win_keep_x + win_button_w, win_buttons_y + win_button_h, false);
+    draw_set_colour(make_colour_rgb(130, 230, 170));
+    draw_rectangle(win_keep_x, win_buttons_y, win_keep_x + win_button_w, win_buttons_y + win_button_h, true);
+    draw_set_colour(c_white);
+    draw_text(win_keep_x + win_button_w * 0.5, win_buttons_y + 16, "Keep Playing");
+
+    draw_set_colour(quit_hover ? make_colour_rgb(140, 60, 60) : make_colour_rgb(95, 42, 46));
+    draw_rectangle(win_quit_x, win_buttons_y, win_quit_x + win_button_w, win_buttons_y + win_button_h, false);
+    draw_set_colour(make_colour_rgb(230, 120, 120));
+    draw_rectangle(win_quit_x, win_buttons_y, win_quit_x + win_button_w, win_buttons_y + win_button_h, true);
+    draw_set_colour(c_white);
+    draw_text(win_quit_x + win_button_w * 0.5, win_buttons_y + 16, "Quit");
+
+    draw_set_halign(old_halign_win);
+    draw_set_valign(old_valign_win);
 }
