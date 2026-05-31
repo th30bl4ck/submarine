@@ -1,10 +1,15 @@
 interact_range = 72;
 show_prompt = false;
 key_id = clamp(ceil(abs(x - (room_width * 0.5)) / 2200), 1, 3);
+key_code = "key_" + string(key_id);
+key_label = "surface gate key " + string(key_id);
 key_key = room_get_name(room) + ":key:" + string(round(x)) + ":" + string(round(y));
 
 if (!variable_global_exists("surface_keys")) {
     global.surface_keys = 0;
+}
+if (!variable_global_exists("surface_key_codes")) {
+    global.surface_key_codes = [];
 }
 if (!variable_global_exists("surface_collected_keys")) {
     global.surface_collected_keys = [];

@@ -17,7 +17,7 @@ if (near_player && keyboard_check_pressed(ord("E")) && !global.combat_active) {
         global.tutorial_seen_hotel = true;
         global.tutorial_popup_active = true;
         global.tutorial_popup_title = "SURVIVOR HOTEL";
-        global.tutorial_popup_body = "The hotel stores rescued survivors back at the dome.\n\nOpen it whenever you want to manage your crew. Survivors in storage are safe, and equipped survivors can travel with you on the surface.";
+        global.tutorial_popup_body = "The hotel stores rescued survivors back at the city.\n\nOpen it whenever you want to manage your crew. Survivors in storage are safe, and equipped survivors can travel with you on the surface. City upgrades increase every survivor's max HP.";
     }
 }
 

@@ -18,12 +18,22 @@ if (point_distance(x, y, obj_player.x, obj_player.y) < interact_range) {
     show_prompt = true;
 
     if (keyboard_check_pressed(ord("E")) && !obj_player.near_submarine) {
-        if (global.surface_keys >= required_key) {
+        var has_required_key = false;
+        if (variable_global_exists("surface_key_codes")) {
+            for (var code_i = 0; code_i < array_length(global.surface_key_codes); code_i++) {
+                if (global.surface_key_codes[code_i] == required_key_code) {
+                    has_required_key = true;
+                }
+            }
+        }
+
+        var allows_legacy_key = (required_key_code == "key_" + string(required_key) && global.surface_keys >= required_key);
+        if (has_required_key || allows_legacy_key) {
             global.surface_open_gates[array_length(global.surface_open_gates)] = gate_key;
             global.combat_message = "Gate unlocked.";
             instance_destroy();
         } else {
-            global.combat_message = "This gate needs surface key " + string(required_key) + ".";
+            global.combat_message = "This gate needs " + required_key_label + ".";
         }
     }
 }

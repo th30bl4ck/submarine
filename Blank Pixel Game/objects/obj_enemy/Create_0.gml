@@ -13,7 +13,7 @@ if (object_index == obj_shaman) {
 } else if (object_index == obj_tank) {
     enemy_role = "tank";
     enemy_display_name = tank_names[irandom(array_length(tank_names) - 1)];
-    sprite_index = spr_tank;
+    sprite_index = spr_enemy_tank;
     max_hp = 135;
 } else {
     enemy_display_name = enemy_names[irandom(array_length(enemy_names) - 1)];

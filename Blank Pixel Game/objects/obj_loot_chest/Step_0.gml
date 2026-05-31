@@ -32,7 +32,7 @@ if (point_distance(x, y, obj_player.x, obj_player.y) < interact_range) {
             global.tutorial_seen_loot = true;
             global.tutorial_popup_active = true;
             global.tutorial_popup_title = "LOOTING";
-            global.tutorial_popup_body = "Loot caches give you the materials needed for upgrades.\n\nIron, crystal, and obsidian appear in your resource panel. Bring those materials back to the upgrade shop to expand the dome and push farther out.";
+            global.tutorial_popup_body = "Loot caches give you the materials needed for city upgrades.\n\nIron, crystal, and obsidian appear in your resource panel. Bring those materials back to the upgrade shop to expand the safe area, raise max HP for you and survivors, and strengthen your combat moves.";
         }
         opened = true;
         show_prompt = false;

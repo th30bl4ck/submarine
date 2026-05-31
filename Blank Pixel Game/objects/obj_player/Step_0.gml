@@ -27,6 +27,25 @@ var zone_right_tunnel_min = zone_w * 3;
 var zone_right_ocean_min = zone_w * 4;
 var zone_world_max = zone_w * 5;
 var player_in_safe_dome = (room == room_dome && x >= zone_left_tunnel_min && x < zone_right_ocean_min);
+function player_hits_solid(_x, _y) {
+    return place_meeting(_x, _y, obj_platform) || place_meeting(_x, _y, obj_big_rock);
+}
+
+var stuck_rock = instance_place(x, y, obj_big_rock);
+if (stuck_rock != noone) {
+    if (x < stuck_rock.x) {
+        x = stuck_rock.bbox_left - (bbox_right - x) - 1;
+    } else {
+        x = stuck_rock.bbox_right + (x - bbox_left) + 1;
+    }
+    vx = 0;
+}
+var desired_player_max_hp = 100 + (variable_global_exists("city_hp_bonus") ? global.city_hp_bonus : 0);
+if (max_hp != desired_player_max_hp) {
+    var player_hp_delta = desired_player_max_hp - max_hp;
+    max_hp = desired_player_max_hp;
+    hp = clamp(hp + player_hp_delta, 1, max_hp);
+}
 
 if (room != room_surface) {
     with (obj_teammate_follower) instance_destroy();
@@ -733,7 +752,7 @@ if (place_meeting(x, y, obj_enemy)) {
             global.tutorial_seen_combat = true;
             global.tutorial_popup_active = true;
             global.tutorial_popup_title = "COMBAT";
-            global.tutorial_popup_body = "Combat is turn based.\n\nPress 1-4 or click a move, then choose an enemy target when asked. Brace reduces incoming damage, Repair Suit heals the weakest ally, and equipped survivors take turns beside you.";
+            global.tutorial_popup_body = "Combat is turn based.\n\nPress 1-4 or click a move, then choose an enemy target when asked. Brace reduces incoming damage, Repair Suit heals the weakest ally, and equipped survivors take turns beside you. Upgrading the city raises your max HP, survivor max HP, and move power.";
         }
         exit;
     }
@@ -790,8 +809,8 @@ vy += grav;
 vy = min(vy, 18);
 
 // Horizontal collision
-if (place_meeting(x + vx, y, obj_platform)) {
-    while (!place_meeting(x + sign(vx), y, obj_platform)) {
+if (player_hits_solid(x + vx, y)) {
+    while (!player_hits_solid(x + sign(vx), y)) {
         x += sign(vx);
     }
     vx = 0;
@@ -816,8 +835,8 @@ if (room == room_ocean_floor_left_1 && x >= room_width - 14 && move_right) {
 
 // Vertical collision
 on_ground = false;
-if (place_meeting(x, y + vy, obj_platform)) {
-    while (!place_meeting(x, y + sign(vy), obj_platform)) {
+if (player_hits_solid(x, y + vy)) {
+    while (!player_hits_solid(x, y + sign(vy))) {
         y += sign(vy);
     }
     if (vy > 0) on_ground = true;

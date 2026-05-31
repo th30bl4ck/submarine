@@ -14,10 +14,13 @@ if (instance_exists(obj_player) && point_distance(x, y, obj_player.x, obj_player
             global.teammate_roster = [];
         }
 
+        var city_hp_bonus = variable_global_exists("city_hp_bonus") ? global.city_hp_bonus : 0;
+        var boosted_recruit_hp = recruit_hp + city_hp_bonus;
         global.teammate_roster[array_length(global.teammate_roster)] = {
             name: recruit_name,
-            hp: recruit_hp,
-            max_hp: recruit_hp,
+            base_max_hp: recruit_hp,
+            hp: boosted_recruit_hp,
+            max_hp: boosted_recruit_hp,
             sprite: recruit_idle_sprite,
             idle_sprite: recruit_idle_sprite,
             walk_sprite: recruit_walk_sprite,
@@ -32,7 +35,7 @@ if (instance_exists(obj_player) && point_distance(x, y, obj_player.x, obj_player
             global.tutorial_seen_survivor_equip = true;
             global.tutorial_popup_active = true;
             global.tutorial_popup_title = "EQUIPPING SURVIVORS";
-            global.tutorial_popup_body = "Your first survivor is waiting in the hotel back at the dome.\n\nReturn to the survivor hotel, press E to open the party manager, then press that survivor's number to equip them. You can bring up to three survivors with you.";
+            global.tutorial_popup_body = "Your first survivor is waiting in the hotel back at the dome.\n\nReturn to the survivor hotel, press E to open the party manager, then press that survivor's number to equip them. You can bring up to three survivors with you. City upgrades also increase survivor max HP.";
         }
         instance_destroy();
     }
